@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36401.2 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Instant-messaging_application", "Instant-messaging_application.csproj", "{6AED6714-098E-4B90-A907-7A256F594E16}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "..\Client\Client.csproj", "{48C1A11B-68FA-4FB2-83B5-489EF97B5CF4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6AED6714-098E-4B90-A907-7A256F594E16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AED6714-098E-4B90-A907-7A256F594E16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AED6714-098E-4B90-A907-7A256F594E16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AED6714-098E-4B90-A907-7A256F594E16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48C1A11B-68FA-4FB2-83B5-489EF97B5CF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48C1A11B-68FA-4FB2-83B5-489EF97B5CF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48C1A11B-68FA-4FB2-83B5-489EF97B5CF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48C1A11B-68FA-4FB2-83B5-489EF97B5CF4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7394EBC6-A9FA-47E0-AECA-AC47B7F9538B}
+	EndGlobalSection
+EndGlobal
