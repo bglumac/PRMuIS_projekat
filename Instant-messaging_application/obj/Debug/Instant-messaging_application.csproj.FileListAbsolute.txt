@@ -1,0 +1,11 @@
+C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mreza\Projekat\PRMuIS_projekat\Instant-messaging_application\bin\Debug\Instant-messaging_application.exe.config
+C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mreza\Projekat\PRMuIS_projekat\Instant-messaging_application\bin\Debug\Instant-messaging_application.exe
+C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mreza\Projekat\PRMuIS_projekat\Instant-messaging_application\bin\Debug\Instant-messaging_application.pdb
+C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mreza\Projekat\PRMuIS_projekat\Instant-messaging_application\obj\Debug\Instant-messaging_application.csproj.AssemblyReference.cache
+C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mreza\Projekat\PRMuIS_projekat\Instant-messaging_application\obj\Debug\Instant-messaging_application.csproj.CoreCompileInputs.cache
+C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mreza\Projekat\PRMuIS_projekat\Instant-messaging_application\obj\Debug\Instant-messaging_application.exe
+C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mreza\Projekat\PRMuIS_projekat\Instant-messaging_application\obj\Debug\Instant-messaging_application.pdb
+C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mreza\Projekat\PRMuIS_projekat\Instant-messaging_application\obj\Debug\Instant-messaging_application.exe.config
+C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mreza\Projekat\PRMuIS_projekat\Instant-messaging_application\bin\Debug\KlijentData.dll
+C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mreza\Projekat\PRMuIS_projekat\Instant-messaging_application\bin\Debug\KlijentData.pdb
+C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mreza\Projekat\PRMuIS_projekat\Instant-messaging_application\obj\Debug\Instant-.D0DF7918.Up2Date
