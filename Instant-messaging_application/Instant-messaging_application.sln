@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Instant-messaging_applicati
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "..\Client\Client.csproj", "{48C1A11B-68FA-4FB2-83B5-489EF97B5CF4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientData", "..\KlijentData\ClientData.csproj", "{ADAE0BCE-A8D0-4C14-A041-2F8F6DDEE474}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientData", "..\ClientData\ClientData.csproj", "{D06B0C99-0EE2-4A18-B5D6-5FE5B92FA8BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{48C1A11B-68FA-4FB2-83B5-489EF97B5CF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48C1A11B-68FA-4FB2-83B5-489EF97B5CF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48C1A11B-68FA-4FB2-83B5-489EF97B5CF4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ADAE0BCE-A8D0-4C14-A041-2F8F6DDEE474}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ADAE0BCE-A8D0-4C14-A041-2F8F6DDEE474}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ADAE0BCE-A8D0-4C14-A041-2F8F6DDEE474}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ADAE0BCE-A8D0-4C14-A041-2F8F6DDEE474}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D06B0C99-0EE2-4A18-B5D6-5FE5B92FA8BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D06B0C99-0EE2-4A18-B5D6-5FE5B92FA8BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D06B0C99-0EE2-4A18-B5D6-5FE5B92FA8BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D06B0C99-0EE2-4A18-B5D6-5FE5B92FA8BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
