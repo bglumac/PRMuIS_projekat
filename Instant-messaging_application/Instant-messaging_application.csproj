@@ -50,8 +50,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\KlijentData\ClientData.csproj">
-      <Project>{adae0bce-a8d0-4c14-a041-2f8f6ddee474}</Project>
+    <ProjectReference Include="..\ClientData\ClientData.csproj">
+      <Project>{d06b0c99-0ee2-4a18-b5d6-5fe5b92fa8be}</Project>
       <Name>ClientData</Name>
     </ProjectReference>
   </ItemGroup>

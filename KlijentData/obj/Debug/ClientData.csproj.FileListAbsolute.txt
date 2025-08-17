@@ -1,6 +1,0 @@
-C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mreza\Projekat\PRMuIS_projekat\KlijentData\bin\Debug\KlijentData.dll
-C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mreza\Projekat\PRMuIS_projekat\KlijentData\bin\Debug\KlijentData.pdb
-C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mreza\Projekat\PRMuIS_projekat\KlijentData\obj\Debug\ClientData.csproj.AssemblyReference.cache
-C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mreza\Projekat\PRMuIS_projekat\KlijentData\obj\Debug\ClientData.csproj.CoreCompileInputs.cache
-C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mreza\Projekat\PRMuIS_projekat\KlijentData\obj\Debug\KlijentData.dll
-C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mreza\Projekat\PRMuIS_projekat\KlijentData\obj\Debug\KlijentData.pdb
