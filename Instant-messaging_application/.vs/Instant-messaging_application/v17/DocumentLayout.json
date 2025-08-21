@@ -3,14 +3,14 @@
   "WorkspaceRootPath": "C:\\Users\\Bojana\\Documents\\Fakultet\\III_godina\\5.semestar\\Primena racunarskih mreza\\Projekat\\PRMuIS_projekat\\Instant-messaging_application\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{6AED6714-098E-4B90-A907-7A256F594E16}|Instant-messaging_application.csproj|c:\\users\\bojana\\documents\\fakultet\\iii_godina\\5.semestar\\primena racunarskih mreza\\projekat\\prmuis_projekat\\instant-messaging_application\\server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6AED6714-098E-4B90-A907-7A256F594E16}|Instant-messaging_application.csproj|solutionrelative:server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{48C1A11B-68FA-4FB2-83B5-489EF97B5CF4}|..\\Client\\Client.csproj|c:\\users\\bojana\\documents\\fakultet\\iii_godina\\5.semestar\\primena racunarskih mreza\\projekat\\prmuis_projekat\\client\\client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D06B0C99-0EE2-4A18-B5D6-5FE5B92FA8BE}|..\\ClientData\\ClientData.csproj|c:\\users\\bojana\\documents\\fakultet\\iii_godina\\5.semestar\\primena racunarskih mreza\\projekat\\prmuis_projekat\\clientdata\\client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E00688B6-B713-40B9-91DB-83F44D4009CD}|..\\ClientClass\\ClientClass.csproj|c:\\users\\bojana\\documents\\fakultet\\iii_godina\\5.semestar\\primena racunarskih mreza\\projekat\\prmuis_projekat\\clientclass\\clientdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6AED6714-098E-4B90-A907-7A256F594E16}|Instant-messaging_application.csproj|c:\\users\\bojana\\documents\\fakultet\\iii_godina\\5.semestar\\primena racunarskih mreza\\projekat\\prmuis_projekat\\instant-messaging_application\\server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6AED6714-098E-4B90-A907-7A256F594E16}|Instant-messaging_application.csproj|solutionrelative:server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -20,7 +20,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -40,39 +40,39 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Client.cs",
-              "DocumentMoniker": "C:\\Users\\Bojana\\Documents\\Fakultet\\III_godina\\5.semestar\\Primena racunarskih mreza\\Projekat\\PRMuIS_projekat\\ClientData\\Client.cs",
-              "RelativeDocumentMoniker": "..\\ClientData\\Client.cs",
-              "ToolTip": "C:\\Users\\Bojana\\Documents\\Fakultet\\III_godina\\5.semestar\\Primena racunarskih mreza\\Projekat\\PRMuIS_projekat\\ClientData\\Client.cs",
-              "RelativeToolTip": "..\\ClientData\\Client.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAABGAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "ClientData.cs",
+              "DocumentMoniker": "C:\\Users\\Bojana\\Documents\\Fakultet\\III_godina\\5.semestar\\Primena racunarskih mreza\\Projekat\\PRMuIS_projekat\\ClientClass\\ClientData.cs",
+              "RelativeDocumentMoniker": "..\\ClientClass\\ClientData.cs",
+              "ToolTip": "C:\\Users\\Bojana\\Documents\\Fakultet\\III_godina\\5.semestar\\Primena racunarskih mreza\\Projekat\\PRMuIS_projekat\\ClientClass\\ClientData.cs",
+              "RelativeToolTip": "..\\ClientClass\\ClientData.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAcwBkAAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-17T21:03:29.061Z",
+              "WhenOpened": "2025-08-20T16:45:29.014Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Client.cs",
               "DocumentMoniker": "C:\\Users\\Bojana\\Documents\\Fakultet\\III_godina\\5.semestar\\Primena racunarskih mreza\\Projekat\\PRMuIS_projekat\\Client\\Client.cs",
               "RelativeDocumentMoniker": "..\\Client\\Client.cs",
               "ToolTip": "C:\\Users\\Bojana\\Documents\\Fakultet\\III_godina\\5.semestar\\Primena racunarskih mreza\\Projekat\\PRMuIS_projekat\\Client\\Client.cs",
               "RelativeToolTip": "..\\Client\\Client.cs",
-              "ViewState": "AgIAACIAAAAAAAAAAAAgwCIAAAARAAAAAAAAAA==",
+              "ViewState": "AgIAAE0AAAAAAAAAAAAYwF0AAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-08-11T20:19:14.161Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "Server.cs",
               "DocumentMoniker": "C:\\Users\\Bojana\\Documents\\Fakultet\\III_godina\\5.semestar\\Primena racunarskih mreza\\Projekat\\PRMuIS_projekat\\Instant-messaging_application\\Server.cs",
               "RelativeDocumentMoniker": "Server.cs",
               "ToolTip": "C:\\Users\\Bojana\\Documents\\Fakultet\\III_godina\\5.semestar\\Primena racunarskih mreza\\Projekat\\PRMuIS_projekat\\Instant-messaging_application\\Server.cs",
               "RelativeToolTip": "Server.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAAAEkAAAA1AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAIIAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-08-11T20:18:44.065Z",
               "EditorCaption": ""
