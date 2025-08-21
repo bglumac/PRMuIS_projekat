@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Configuration;
 using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
@@ -20,71 +22,77 @@ namespace Client
             Console.Title = "Client";
 
             Console.WriteLine("Instant-messaging application! WELCOME!");
+            Console.WriteLine("Log in to start chattng!");
             Socket clientSockeUDP = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-            IPEndPoint destinationEP = new IPEndPoint(IPAddress.Loopback, 50000);
-            EndPoint sourceEP = new IPEndPoint(IPAddress.Any, 0);
+            //IPEndPoint clientEP = new IPEndPoint(IPAddress.Loopback, 50000);  
+           
+            EndPoint serverEP = new IPEndPoint(IPAddress.Loopback, 50000);  
 
-            byte[] recievedBuffer = new byte[65000];
+            byte[] recievedBuffer = new byte[5000];    
+            int numBytes;
             byte[] sendBuffer;
             bool logged = false;
+            bool validChannel = false;
+            string serverMessage;
             List<string> channels = new List<string>();
 
-            try
+
+            while (true)
             {
                 while (!logged)
                 {
-                    //Unos podataka klijenta
+                    //Podaci klijenta
                     Console.Write("Enter your username: ");
                     string username = Console.ReadLine();
                     Console.Write("Enter your password: ");
                     string password = Console.ReadLine();
-                    
+
+                    //u ovom formatu saljemo serveru podatke
                     string clientData = username + '|' + password;
                     sendBuffer = Encoding.UTF8.GetBytes(clientData);
 
-                    try
+                    clientSockeUDP.SendTo(sendBuffer, 0, sendBuffer.Length, SocketFlags.None, serverEP);
+
+                    numBytes = clientSockeUDP.ReceiveFrom(recievedBuffer, ref serverEP);
+                    serverMessage = Encoding.UTF8.GetString(recievedBuffer, 0, numBytes);
+                    
+                    if(serverMessage.Contains("Start chatting now"))
                     {
-                        //slanje serveru login podatke
-                        clientSockeUDP.SendTo(sendBuffer, destinationEP);
-
-                        int numBytes = clientSockeUDP.ReceiveFrom(recievedBuffer, ref sourceEP);
-                        string serverMessage = Encoding.UTF8.GetString(recievedBuffer, 0, numBytes);
-
-                        if (serverMessage.Contains("Try again"))
-                        {
-                            Console.WriteLine($"Error: {serverMessage}\n");
-                        }
-                        else
-                        {
-                            Console.WriteLine(serverMessage);
-                            logged = true;
-                        }
-
-                        Console.WriteLine("Choose a chat channel you would like to use:");
-                        numBytes = clientSockeUDP.ReceiveFrom(recievedBuffer, ref sourceEP);
-                        serverMessage = Encoding.UTF8.GetString(recievedBuffer, 0, numBytes);
-
-                        List<string> chatChannels = serverMessage.Split(',').ToList();
-                        foreach(var ch in chatChannels)
-                        {
-                            Console.WriteLine($"- {ch}");
-                        }
-
-                        Console.Write("Channel name: ");
-                        string chosenChannel = Console.ReadLine();
-
-                        sendBuffer = Encoding.UTF8.GetBytes(chosenChannel);
-                        clientSockeUDP.SendTo(sendBuffer, destinationEP);
-
+                        Console.WriteLine(serverMessage);
+                        logged = true;
                     }
-                    catch(SocketException ex)
+                    else
                     {
-                        Console.WriteLine($"An error occurred while trying to send/recieve message\nError: {ex.Message}");
+                        Console.WriteLine($"ERROR: {serverMessage}");
                     }
                 }
-            }catch(Exception ex)
-            {
-                Console.WriteLine("An error occcurred: " + ex.Message);
+
+
+                while (!validChannel)
+                {
+                    Console.Write("Enter channel name you want to join: ");
+                    string channel = Console.ReadLine();
+
+                    sendBuffer = Encoding.UTF8.GetBytes(channel);
+                    clientSockeUDP.SendTo(sendBuffer, 0, sendBuffer.Length, SocketFlags.None, serverEP);
+
+                    numBytes = clientSockeUDP.ReceiveFrom(recievedBuffer, ref serverEP);
+                    serverMessage = Encoding.UTF8.GetString(recievedBuffer, 0, numBytes);
+
+                    if (serverMessage.Contains("Successfully"))
+                    {
+                        Console.WriteLine(serverMessage);
+                        validChannel = true;
+
+                        clientSockeUDP.Close();
+                        Console.WriteLine("UDP socket closed. Switching to TCP for chatting...");   // privremeno resenja dok se ne implementira TCP da konzola ostane u radu
+                    }
+                    else
+                    {
+                        Console.WriteLine(serverMessage);
+                    }
+                }
+
             }
 
             #endregion
