@@ -3,17 +3,8 @@
   "WorkspaceRootPath": "D:\\Repositories\\Personal\\PRMuIS_projekat\\Instant-messaging_application\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{48C1A11B-68FA-4FB2-83B5-489EF97B5CF4}|..\\Client\\Client.csproj|d:\\repositories\\personal\\prmuis_projekat\\client\\client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{6AED6714-098E-4B90-A907-7A256F594E16}|Instant-messaging_application.csproj|d:\\repositories\\personal\\prmuis_projekat\\instant-messaging_application\\server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{6AED6714-098E-4B90-A907-7A256F594E16}|Instant-messaging_application.csproj|solutionrelative:server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Bojana\\Documents\\Fakultet\\III_godina\\5.semestar\\Primena racunarskih mreza\\Projekat\\PRMuIS_projekat\\ClientClass\\ClientData.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Bojana\\Documents\\Fakultet\\III_godina\\5.semestar\\Primena racunarskih mreza\\Projekat\\PRMuIS_projekat\\Client\\Client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -23,54 +14,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Client.cs",
-              "DocumentMoniker": "D:\\Repositories\\Personal\\PRMuIS_projekat\\Client\\Client.cs",
-              "RelativeDocumentMoniker": "..\\Client\\Client.cs",
-              "ToolTip": "D:\\Repositories\\Personal\\PRMuIS_projekat\\Client\\Client.cs",
-              "RelativeToolTip": "..\\Client\\Client.cs",
-              "ViewState": "AgIAAFIAAAAAAAAAAAAQwBQAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-25T15:36:25.306Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ClientData.cs",
-              "DocumentMoniker": "C:\\Users\\Bojana\\Documents\\Fakultet\\III_godina\\5.semestar\\Primena racunarskih mreza\\Projekat\\PRMuIS_projekat\\ClientClass\\ClientData.cs",
-              "ToolTip": "C:\\Users\\Bojana\\Documents\\Fakultet\\III_godina\\5.semestar\\Primena racunarskih mreza\\Projekat\\PRMuIS_projekat\\ClientClass\\ClientData.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAcwBkAAAAyAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-20T16:45:29.014Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Client.cs",
-              "DocumentMoniker": "C:\\Users\\Bojana\\Documents\\Fakultet\\III_godina\\5.semestar\\Primena racunarskih mreza\\Projekat\\PRMuIS_projekat\\Client\\Client.cs",
-              "ToolTip": "C:\\Users\\Bojana\\Documents\\Fakultet\\III_godina\\5.semestar\\Primena racunarskih mreza\\Projekat\\PRMuIS_projekat\\Client\\Client.cs",
-              "ViewState": "AgIAAE0AAAAAAAAAAAAYwF0AAAARAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-11T20:19:14.161Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
               "Title": "Server.cs",
               "DocumentMoniker": "D:\\Repositories\\Personal\\PRMuIS_projekat\\Instant-messaging_application\\Server.cs",
               "RelativeDocumentMoniker": "Server.cs",
               "ToolTip": "D:\\Repositories\\Personal\\PRMuIS_projekat\\Instant-messaging_application\\Server.cs",
               "RelativeToolTip": "Server.cs",
-              "ViewState": "AgIAAAEAAAAAAAAAAAAkwCIAAAAMAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAwJgAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-08-11T20:18:44.065Z",
               "EditorCaption": ""

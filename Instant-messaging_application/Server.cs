@@ -18,7 +18,6 @@ namespace Instant_messaging_application
 {
     internal class Server
     {
-        private static int expectedClients = 3;
         public static List<ClientData> clients = new List<ClientData>();
         public static List<string> chatChannels = new List<string>()
         {
@@ -43,13 +42,11 @@ namespace Instant_messaging_application
 
             Console.WriteLine($"Server initialized and waiting on: {serverEP}");
 
-            StartClient(expectedClients);
-
             byte[] buffer = new byte[5000];         //buffer za prijem poruka od klijenta
             byte[] sendMessage;
             int numBytes;
 
-            while (clients.Count < expectedClients)
+            while (true)
             {
                 try
                 {
@@ -222,6 +219,7 @@ namespace Instant_messaging_application
             catch (SocketException e)
             {
                 Console.WriteLine(e.Message);
+                serverSocketTCP.Close();
             }
         }
     }
