@@ -98,5 +98,16 @@ namespace Client
             #endregion
 
         }
+
+        public static void TCPConnect()
+        {
+            Socket clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+            IPEndPoint serverEP = new IPEndPoint(IPAddress.Loopback, 8001);
+
+            Console.WriteLine("Klijent je spreman za povezivanje sa serverom...");
+            clientSocket.Connect(serverEP);
+            Console.WriteLine("Povezivanje uspesno!");
+        }
     }
 }

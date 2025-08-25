@@ -197,6 +197,32 @@ namespace Instant_messaging_application
             Console.WriteLine(new string('-', 100));
         }
 
+        static List<Socket> clientSockets;
+        public static void TCPConnectionSetup()
+        {
+            Socket serverSocketTCP = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            IPEndPoint serverEP = new IPEndPoint(IPAddress.Any, 8001);
+            serverSocketTCP.Bind(serverEP);
+            serverSocketTCP.Listen(100);
 
+            clientSockets = new List<Socket>();
+
+            byte[] buffer = new byte[1024];
+            try
+            {
+                Console.WriteLine("TCP socket listening on " + serverEP);
+                while (true)
+                {
+                    Socket newClient = serverSocketTCP.Accept();
+                    clientSockets.Add(newClient);
+                    Console.WriteLine("Novi client se povezao: " + newClient.RemoteEndPoint);
+                }
+            }
+
+            catch (SocketException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
     }
 }
