@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Configuration;
 using System.Net.Sockets;
+using System.Runtime.Remoting.Contexts;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
@@ -56,7 +57,7 @@ namespace Client
                     numBytes = clientSockeUDP.ReceiveFrom(recievedBuffer, ref serverEP);
                     serverMessage = Encoding.UTF8.GetString(recievedBuffer, 0, numBytes);
                     
-                    if(serverMessage.Contains("Start chatting now"))
+                    if(serverMessage.Contains("Welcome"))
                     {
                         Console.WriteLine(serverMessage);
                         logged = true;
@@ -67,30 +68,56 @@ namespace Client
                     }
                 }
 
-
                 while (!validChannel)
                 {
-                    Console.Write("Enter channel name you want to join: ");
-                    string channel = Console.ReadLine();
+                    //lista kanala od servera
+                    numBytes = clientSockeUDP.ReceiveFrom(recievedBuffer, ref serverEP);
+                    serverMessage = Encoding.UTF8.GetString(recievedBuffer, 0, numBytes);
+                    Console.WriteLine(serverMessage);
 
-                    sendBuffer = Encoding.UTF8.GetBytes(channel);
+                    Console.Write("Enter channel of your choice: ");
+                    string chosen = Console.ReadLine().Trim();
+
+                    sendBuffer = Encoding.UTF8.GetBytes(chosen);
                     clientSockeUDP.SendTo(sendBuffer, 0, sendBuffer.Length, SocketFlags.None, serverEP);
 
                     numBytes = clientSockeUDP.ReceiveFrom(recievedBuffer, ref serverEP);
                     serverMessage = Encoding.UTF8.GetString(recievedBuffer, 0, numBytes);
 
-                    if (serverMessage.Contains("Successfully"))
+                    while(serverMessage.Contains("Add new"))
+                    {
+                        Console.Write("Enter new channel name: ");
+                        string newChannel = Console.ReadLine().Trim();
+
+                        sendBuffer = Encoding.UTF8.GetBytes(newChannel);
+                        clientSockeUDP.SendTo(sendBuffer, 0, sendBuffer.Length, SocketFlags.None, serverEP);
+
+                        //poruka servera da li je dodat novi kanal ili ne
+                        numBytes = clientSockeUDP.ReceiveFrom(recievedBuffer, ref serverEP);
+                        serverMessage = Encoding.UTF8.GetString(recievedBuffer, 0, numBytes);
+
+                        Console.WriteLine(serverMessage);
+
+                        if (serverMessage.Contains("added"))
+                        { 
+                            break;
+                        }
+                    }
+                    
+                    //prelazimo na TCP za chat
+                    if(serverMessage.Contains("Successfully joined"))
                     {
                         Console.WriteLine(serverMessage);
                         validChannel = true;
-
                         clientSockeUDP.Close();
-                        Console.WriteLine("UDP socket closed. Switching to TCP for chatting...");   // privremeno resenja dok se ne implementira TCP da konzola ostane u radu
+                        TCPConnect();
                     }
-                    else
+                    else if(serverMessage.Contains("Invalid option"))
                     {
                         Console.WriteLine(serverMessage);
+                        //Console.WriteLine("Please try again...");
                     }
+
                 }
 
             }
