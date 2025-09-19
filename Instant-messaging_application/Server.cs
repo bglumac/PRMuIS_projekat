@@ -101,13 +101,12 @@ namespace Instant_messaging_application
                         Console.WriteLine("Waiting for channel...");
 
                         List<string> channelOptions = new List<string>(chatChannels);   //temp lista za biranje kanala
-                        channelOptions.Add("Add new channel");
 
-                        //salje se izbor kanala
+                        // Salje se izbor kanala
                         sendMessage = Encoding.UTF8.GetBytes("Choose a channel you would like to use:\n" + string.Join("\n", channelOptions.Select((c, i) => $"{i + 1}.{c}")));
                         serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, clientEP);
 
-                        //klijentov odgovor
+                        // Klijentov odgovor
                         numBytes = serverSocketUDP.ReceiveFrom(buffer, ref clientEP);
                         string chosen = Encoding.UTF8.GetString(buffer, 0, numBytes).Trim();
 
@@ -120,47 +119,17 @@ namespace Instant_messaging_application
                             continue;
                         }
 
-                        if(index == channelOptions.Count)
+                        string selectedChannel = channelOptions[index - 1];
+                        var client = clients.FirstOrDefault(c => c.EndPoint.Equals(clientEP));
+                        if (client != null)
                         {
-                            sendMessage = Encoding.UTF8.GetBytes("Add new channel option");
-                            serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, clientEP);
-                            Console.WriteLine($"User {username}:{clientEP} is adding a new channel");
-
-
-                            numBytes = serverSocketUDP.ReceiveFrom(buffer, ref clientEP);
-                            string newChannel = Encoding.UTF8.GetString(buffer, 0, numBytes).Trim();
-                            newChannel = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(newChannel.ToLower());     //formatiranje zbog dalje provere sa ostalim kanalima
-
-                            if (!chatChannels.Contains(newChannel))
-                            {
-                                chatChannels.Add(newChannel);  
-                                sendMessage = Encoding.UTF8.GetBytes($"Channel '{newChannel.ToUpper()}' added! Choose channel again.");
-                                Console.WriteLine($"User {username}:{clientEP} has added a new chatting channel {newChannel.ToUpper()}");
-                                
-                            }
-                            else
-                            {
-                                sendMessage = Encoding.UTF8.GetBytes($"Channel '{newChannel.ToUpper()}' already exists! Choose channel again.");
-                                Console.WriteLine($"User {username}:{clientEP} tried adding an existing channel {newChannel.ToUpper()}");
-                            }
-
-                            serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, clientEP);
-                            continue;
+                            client.ActiveOnChannel = selectedChannel;
+                            client.Status = Status.Online;
                         }
-                        else 
-                        {
-                            string selectedChannel = channelOptions[index - 1];
-                            var client = clients.FirstOrDefault(c => c.EndPoint.Equals(clientEP));
-                            if (client != null)
-                            {
-                                client.ActiveOnChannel = selectedChannel;
-                                client.Status = Status.Online;
-                            }
 
-                            sendMessage = Encoding.UTF8.GetBytes($"Successfully joined {selectedChannel.ToUpper()} channel! Start chatting now!");
-                            serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, clientEP);
-                            Console.WriteLine($"User {username}:{password}:{clientEP} has joined {selectedChannel.ToUpper()} channel!");
-                        }
+                        sendMessage = Encoding.UTF8.GetBytes($"Successfully joined {selectedChannel.ToUpper()} channel! Start chatting now!");
+                        serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, clientEP);
+                        Console.WriteLine($"User {username}:{password}:{clientEP} has joined {selectedChannel.ToUpper()} channel!");
                     }
 
                     Console.WriteLine("CURRENT SERVER STATE:");
@@ -175,8 +144,6 @@ namespace Instant_messaging_application
            //serverSocketUDP.Close();
 
             #endregion
-
-           
         }
 
         public static void StartClient(int numClients)

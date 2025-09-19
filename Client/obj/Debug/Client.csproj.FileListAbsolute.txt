@@ -6,3 +6,13 @@ C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mre
 C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mreza\Projekat\PRMuIS_projekat\Client\obj\Debug\Client.exe
 C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mreza\Projekat\PRMuIS_projekat\Client\obj\Debug\Client.pdb
 C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mreza\Projekat\PRMuIS_projekat\Client\obj\Debug\Client.exe.config
+D:\Repositories\Personal\PRMuIS_projekat\Client\bin\Debug\Client.exe.config
+D:\Repositories\Personal\PRMuIS_projekat\Client\bin\Debug\Client.exe
+D:\Repositories\Personal\PRMuIS_projekat\Client\bin\Debug\Client.pdb
+D:\Repositories\Personal\PRMuIS_projekat\Client\obj\Debug\Client.csproj.AssemblyReference.cache
+D:\Repositories\Personal\PRMuIS_projekat\Client\obj\Debug\Client.Properties.Resources.resources
+D:\Repositories\Personal\PRMuIS_projekat\Client\obj\Debug\Client.csproj.GenerateResource.cache
+D:\Repositories\Personal\PRMuIS_projekat\Client\obj\Debug\Client.csproj.CoreCompileInputs.cache
+D:\Repositories\Personal\PRMuIS_projekat\Client\obj\Debug\Client.exe
+D:\Repositories\Personal\PRMuIS_projekat\Client\obj\Debug\Client.pdb
+D:\Repositories\Personal\PRMuIS_projekat\Client\obj\Debug\Client.exe.config

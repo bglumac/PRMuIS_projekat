@@ -13,13 +13,14 @@ namespace Client.Classes
         {
             Auth();
             ChannelSelect();
+            Chat();
         }
 
         public static void Auth()
         {
             while (!AuthHandler.getLogged())
             {
-                Console.Clear();
+                // Console.Clear();
                 byte[] sendBuffer;
                 byte[] recievedBuffer = new byte[5000];
                 int numBytes;
@@ -36,12 +37,14 @@ namespace Client.Classes
                 string clientData = username + '|' + password;
                 sendBuffer = Encoding.UTF8.GetBytes(clientData);
 
+
+                Console.WriteLine("Sending data?");
                 ServerUtil.getUDPSocket().SendTo(sendBuffer, 0, sendBuffer.Length, SocketFlags.None, ServerUtil.getServerEndPointUDP());
 
                 numBytes = ServerUtil.getUDPSocket().ReceiveFrom(recievedBuffer, ref ServerUtil.getServerEndPointUDP());
                 serverMessage = Encoding.UTF8.GetString(recievedBuffer, 0, numBytes);
 
-                if (serverMessage.Contains("Start chatting now"))
+                if (serverMessage.Contains("Welcome to the Instant-messaging server!"))
                 {
                     Console.WriteLine(serverMessage);
                     AuthHandler.setLogged(true);
@@ -64,6 +67,11 @@ namespace Client.Classes
             while (!validChannel)
             {
                 Console.Clear();
+                numBytes = ServerUtil.getUDPSocket().ReceiveFrom(recievedBuffer, ref ServerUtil.getServerEndPointUDP());
+                serverMessage = Encoding.UTF8.GetString(recievedBuffer, 0, numBytes);
+                Console.WriteLine(serverMessage);
+
+                
                 Console.Write("Enter channel name you want to join: ");
                 string channel = Console.ReadLine();
 
@@ -88,6 +96,12 @@ namespace Client.Classes
                     Console.WriteLine(serverMessage);
                 }
             }
+        }
+
+        public static void Chat()
+        {
+            Console.WriteLine("To implement...");
+            Console.Read();
         }
     }
 }
