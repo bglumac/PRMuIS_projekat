@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -41,13 +43,21 @@ namespace Client.Classes
                 Console.WriteLine("Sending data?");
                 ServerUtil.getUDPSocket().SendTo(sendBuffer, 0, sendBuffer.Length, SocketFlags.None, ServerUtil.getServerEndPointUDP());
 
-                numBytes = ServerUtil.getUDPSocket().ReceiveFrom(recievedBuffer, ref ServerUtil.getServerEndPointUDP());
+
+                EndPoint serverRecieveEP = new IPEndPoint(IPAddress.Any, 0);
+                numBytes = ServerUtil.getUDPSocket().ReceiveFrom(recievedBuffer, ref serverRecieveEP);
+                //numBytes = ServerUtil.getUDPSocket().ReceiveFrom(recievedBuffer, ref ServerUtil.getServerEndPointUDP());
                 serverMessage = Encoding.UTF8.GetString(recievedBuffer, 0, numBytes);
 
                 if (serverMessage.Contains("Welcome to the Instant-messaging server!"))
                 {
                     Console.WriteLine(serverMessage);
                     AuthHandler.setLogged(true);
+                    serverRecieveEP = new IPEndPoint(IPAddress.Any, 0);
+                    numBytes = ServerUtil.getUDPSocket().ReceiveFrom(recievedBuffer, ref serverRecieveEP);
+                    //numBytes = ServerUtil.getUDPSocket().ReceiveFrom(recievedBuffer, ref ServerUtil.getServerEndPointUDP());
+                    serverMessage = Encoding.UTF8.GetString(recievedBuffer, 0, numBytes);
+                    Console.WriteLine(serverMessage);
                 }
                 else
                 {
@@ -66,35 +76,36 @@ namespace Client.Classes
             bool validChannel = false;
             while (!validChannel)
             {
-                Console.Clear();
-                numBytes = ServerUtil.getUDPSocket().ReceiveFrom(recievedBuffer, ref ServerUtil.getServerEndPointUDP());
-                serverMessage = Encoding.UTF8.GetString(recievedBuffer, 0, numBytes);
-                Console.WriteLine(serverMessage);
-
+                //Console.Clear();
                 
-                Console.Write("Enter channel name you want to join: ");
+                Console.Write("Enter channel you want to join (use numbers): ");
                 string channel = Console.ReadLine();
-
                 sendBuffer = Encoding.UTF8.GetBytes(channel);
                 ServerUtil.getUDPSocket().SendTo(sendBuffer, 0, sendBuffer.Length, SocketFlags.None, ServerUtil.getServerEndPointUDP());
 
-                numBytes = ServerUtil.getUDPSocket().ReceiveFrom(recievedBuffer, ref ServerUtil.getServerEndPointUDP());
+
+                EndPoint serverRecieveEP = new IPEndPoint(IPAddress.Any, 0);
+                numBytes = ServerUtil.getUDPSocket().ReceiveFrom(recievedBuffer, ref serverRecieveEP);
+                //numBytes = ServerUtil.getUDPSocket().ReceiveFrom(recievedBuffer, ref ServerUtil.getServerEndPointUDP());
                 serverMessage = Encoding.UTF8.GetString(recievedBuffer, 0, numBytes);
 
                 if (serverMessage.Contains("Successfully"))
                 {
+                    Console.Clear();
                     Console.WriteLine(serverMessage);
                     validChannel = true;
 
                     ServerUtil.getUDPSocket().Close();
-                    Console.WriteLine("UDP socket closed. Switching to TCP for chatting...");   // privremeno resenja dok se ne implementira TCP da konzola ostane u radu
+                    Console.WriteLine("UDP socket closed. Switching to TCP for chatting...");   // privremeno resenje dok se ne implementira TCP da konzola ostane u radu
                     ServerUtil.ConnectTCP();
                     Console.WriteLine("Povezivanje uspesno!");
                 }
                 else
                 {
                     Console.WriteLine(serverMessage);
+                    continue;
                 }
+
             }
         }
 

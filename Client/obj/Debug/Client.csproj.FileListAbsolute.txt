@@ -16,3 +16,5 @@ D:\Repositories\Personal\PRMuIS_projekat\Client\obj\Debug\Client.csproj.CoreComp
 D:\Repositories\Personal\PRMuIS_projekat\Client\obj\Debug\Client.exe
 D:\Repositories\Personal\PRMuIS_projekat\Client\obj\Debug\Client.pdb
 D:\Repositories\Personal\PRMuIS_projekat\Client\obj\Debug\Client.exe.config
+C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mreza\Projekat\PRMuIS_projekat\Client\obj\Debug\Client.Properties.Resources.resources
+C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mreza\Projekat\PRMuIS_projekat\Client\obj\Debug\Client.csproj.GenerateResource.cache

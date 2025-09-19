@@ -11,6 +11,7 @@ using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,7 +19,9 @@ namespace Instant_messaging_application
 {
     internal class Server
     {
-        public static List<ClientData> clients = new List<ClientData>();
+        public static Dictionary<string, ClientData> clients = new Dictionary<string, ClientData>();
+
+        //public static List<ClientData> clients = new List<ClientData>();
         public static List<string> chatChannels = new List<string>()
         {
             "General",
@@ -29,6 +32,7 @@ namespace Instant_messaging_application
 
         static void Main(string[] args)
         {
+            Console.Title = "Server";
             Console.WriteLine("Instant-messaging application server!");
 
             Task.Run(() => TCPConnectionSetup());
@@ -42,121 +46,115 @@ namespace Instant_messaging_application
             Console.WriteLine($"Server initialized and waiting on: {serverEP}");
 
             byte[] buffer = new byte[5000];         //buffer za prijem poruka od klijenta
-            byte[] sendMessage;
             int numBytes;
 
             while (true)
             {
                 try
                 {
-                    Console.WriteLine("Waiting for log in....");
-
                     EndPoint clientEP = new IPEndPoint(IPAddress.Any, 0);
-
-                    ClientData newClient;
-
                     numBytes = serverSocketUDP.ReceiveFrom(buffer, ref clientEP);
                     string message = Encoding.UTF8.GetString(buffer, 0, numBytes);
 
-                    string[] partsOfLogin = message.Split('|');
+                    var client = clients.Values.FirstOrDefault(c => c.EndPoint.Equals(clientEP));
 
-                    if(partsOfLogin.Length != 2)
+                    if (client == null)
                     {
-                        Console.WriteLine($"Fomrat error on {clientEP}");
-                        sendMessage = Encoding.UTF8.GetBytes("The login format does not match \"username|password\" format. Try again.");
-                        serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, clientEP);
-                        continue;
-                    }
-
-                    string username = partsOfLogin[0];
-                    string password = partsOfLogin[1];
-
-                    bool alrExists = clients.Any(x =>  (x.Username == username && x.Password == password) || (x.Username == username));
-
-                    if(alrExists)
-                    {
-                        sendMessage = Encoding.UTF8.GetBytes($"User {username} is already logged in!");
-                        serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, clientEP);
-                        continue;
+                        HandleLogin(clientEP, message, serverSocketUDP);
                     }
                     else
                     {
-                        Console.WriteLine($"New user has logged in!");
-                        newClient = new ClientData(username, password)
-                        {
-                            EndPoint = clientEP,
-                            TimeLoggedIn = DateTime.Now
-                        };
-                        clients.Add(newClient);
-
-                        PrintClients(clients);
-
-                        sendMessage = Encoding.UTF8.GetBytes("Welcome to the Instant-messaging server!");
-                        serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, clientEP);
+                        HandleClientMessage(client, message, serverSocketUDP);
                     }
-
-
-                    while (newClient.Status == Status.Idle)
-                    {
-                        Console.WriteLine("Waiting for channel...");
-
-                        List<string> channelOptions = new List<string>(chatChannels);   //temp lista za biranje kanala
-
-                        // Salje se izbor kanala
-                        sendMessage = Encoding.UTF8.GetBytes("Choose a channel you would like to use:\n" + string.Join("\n", channelOptions.Select((c, i) => $"{i + 1}.{c}")));
-                        serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, clientEP);
-
-                        // Klijentov odgovor
-                        numBytes = serverSocketUDP.ReceiveFrom(buffer, ref clientEP);
-                        string chosen = Encoding.UTF8.GetString(buffer, 0, numBytes).Trim();
-
-                        int index;
-                        if(!int.TryParse(chosen, out index) || index < 1 || index > channelOptions.Count)
-                        {
-                            sendMessage = Encoding.UTF8.GetBytes("Invalid option. Please choose again.");
-                            serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, clientEP);
-                            Console.WriteLine($"User {username}:{clientEP} has entered a channel option that does not exist.");
-                            continue;
-                        }
-
-                        string selectedChannel = channelOptions[index - 1];
-                        var client = clients.FirstOrDefault(c => c.EndPoint.Equals(clientEP));
-                        if (client != null)
-                        {
-                            client.ActiveOnChannel = selectedChannel;
-                            client.Status = Status.Online;
-                        }
-
-                        sendMessage = Encoding.UTF8.GetBytes($"Successfully joined {selectedChannel.ToUpper()} channel! Start chatting now!");
-                        serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, clientEP);
-                        Console.WriteLine($"User {username}:{password}:{clientEP} has joined {selectedChannel.ToUpper()} channel!");
-                    }
-
-                    Console.WriteLine("CURRENT SERVER STATE:");
-                    PrintClients(clients);
                 }
                 catch (SocketException e)
-                { 
+                {
                     Console.WriteLine($"Socket error: {e.Message}");
                 }
-            }
 
-           //serverSocketUDP.Close();
+                Console.Write(new string('=', 10));
+                Console.Write(" CURRENT SERVER STATE ");
+                Console.WriteLine(new string('=', 10));
+                PrintClients(clients.Values.ToList()); 
+
+            }
 
             #endregion
         }
 
-        public static void StartClient(int numClients)
+        private static void HandleLogin(EndPoint clientEP, string message, Socket serverSocketUDP)
         {
-            for(int i = 0; i < numClients; i++)
+            byte[] sendMessage;
+            string[] parts = message.Split('|');
+
+            if(parts.Length != 2)
             {
-                string clientPath = @"C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mreza\Projekat\PRMuIS_projekat\Client\bin\Debug\Client.exe";
-                Process clientProcess = new Process();
-                clientProcess.StartInfo.FileName = clientPath;
-                clientProcess.StartInfo.Arguments = $"{i + 1}";
-                clientProcess.Start();
-                Console.WriteLine($"Client #{i + 1} started.");
+                sendMessage = Encoding.UTF8.GetBytes("Login format must be: username|password. Try again.");
+                serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, clientEP);
+                return;
             }
+
+            string username = parts[0];
+            string password = parts[1];
+
+            if (clients.ContainsKey(username))
+            {
+                sendMessage = Encoding.UTF8.GetBytes($"User {username} is already logged in!");
+                serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, clientEP);
+                return;
+            }
+
+            var newClient = new ClientData(username, password)
+            {
+                EndPoint = clientEP,
+                Status = Status.Idle,
+                TimeLoggedIn = DateTime.Now
+            };
+            clients[username] = newClient;
+
+            sendMessage = Encoding.UTF8.GetBytes("Welcome to the Instant-messaging server!");
+            serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, clientEP);
+
+            // Posalji listu kanala
+            sendMessage = Encoding.UTF8.GetBytes("Choose a channel you would like to use:\n" + string.Join("\n", chatChannels.Select((c, i) => $"{i + 1}. {c}")));
+            serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, clientEP);
+
+            Console.WriteLine($"New user  {username}:{clientEP}  has logged in.");
+        }
+
+        private static void HandleChannelSelection(ClientData client, string message, Socket serverSocketUDP)
+        {
+            byte[] sendMessage;
+            if (!int.TryParse(message.Trim(), out int index) || index < 1 || index > chatChannels.Count)
+            {
+                sendMessage = Encoding.UTF8.GetBytes("Invalid option. Please choose again.\n" + string.Join("\n", chatChannels.Select((c, i) => $"{i + 1}. {c}")));
+                serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, client.EndPoint);
+                return;
+            }
+
+            client.ActiveOnChannel = chatChannels[index - 1];
+            client.Status = Status.Online;
+
+            sendMessage = Encoding.UTF8.GetBytes($"Successfully joined {client.ActiveOnChannel} channel! Start chatting now!");
+            serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, client.EndPoint);
+
+            Console.WriteLine($"User  {client.Username}  joined  {client.ActiveOnChannel}  channel.");
+        }
+
+        public static void HandleClientMessage(ClientData client, string message, Socket serverSocketUDP)
+        {
+            switch (client.Status)
+            {
+                case Status.Idle:
+                    HandleChannelSelection(client, message, serverSocketUDP);
+                    break;
+                case Status.Online:
+                    // Broadcast jos nije implementiran
+                    byte[] msg = Encoding.UTF8.GetBytes($"[{client.ActiveOnChannel}] {client.Username}: {message}");
+                    serverSocketUDP.SendTo(msg, 0, msg.Length, SocketFlags.None, client.EndPoint);
+                    break;
+            }
+
         }
 
         public static void PrintClients(List<ClientData> clients)
