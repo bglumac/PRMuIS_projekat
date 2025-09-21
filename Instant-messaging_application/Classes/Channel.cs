@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Net.Sockets;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using ClientClass;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Instant_messaging_application.Classes
 {
@@ -28,8 +31,17 @@ namespace Instant_messaging_application.Classes
         {
             foreach (var item in users)
             {
-                MessageType obj = new MessageType(message);
-                item.Value.Send(obj.ToBytes());
+                byte[] buffer = new byte[1024];
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    BinaryFormatter bf = new BinaryFormatter();
+                    MessageType obj = new MessageType("some user", DateTime.Now, null, message);
+                    bf.Serialize(ms, obj);
+                    buffer = ms.ToArray();
+                    Console.WriteLine(obj.GetText());
+                    item.Value.Send(buffer);
+                }
+                
             }
         }
 

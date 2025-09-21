@@ -15,7 +15,9 @@ namespace Instant_messaging_application.Classes
 
         public static void AddChannel()
         {
-            // Something something channel handler
+            // WriteLine("Unesite ime kanala?")
+            // Dodaj kanal
+            // while (nije kanal)
         }
 
         public static void Logs()
@@ -23,6 +25,11 @@ namespace Instant_messaging_application.Classes
             // Clear Logs
             // Go through the whole fucking stack
             // If empty, wait. If not. Print!!!
+
+            // Clear
+            // while (true) {
+            // if (logs.count >0)
+            // thread.sleep(1000)
         }
     }
 }

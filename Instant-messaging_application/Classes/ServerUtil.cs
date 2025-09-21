@@ -60,7 +60,6 @@ namespace Instant_messaging_application.Classes
 
                     if (checkRead.Count > 0)
                     {
-                        Console.WriteLine($"Broj dogadjaja je: {checkRead.Count}");
                         foreach (Socket s in checkRead)
                         {
                             if (s == socketTCP)
@@ -79,11 +78,11 @@ namespace Instant_messaging_application.Classes
                             {
                                 try
                                 {
-                                    bool isAuth = false;
                                     int numByte = s.Receive(buffer);
-                                    if (authList.TryGetValue(s, out isAuth))
+                                    if (!authList[s])
                                     {
-   
+
+                                        Console.WriteLine("Authenticating...");
                                         using (MemoryStream ms = new MemoryStream(buffer, 0, numByte))
                                         {
                                             BinaryFormatter bf = new BinaryFormatter();
@@ -91,7 +90,7 @@ namespace Instant_messaging_application.Classes
                                             AuthData data = bf.Deserialize(ms) as AuthData;
                                             authList[s] = true; //sad ispise sve ali pukne na 93
                                             Console.WriteLine(data.Username + " connected to " + ChannelHandler.channels[data.Channel_idx].name);
-                                            Console.WriteLine("HAAALo");
+                                            ChannelHandler.JoinChannel(ChannelHandler.channels[data.Channel_idx], data.Username, s);
                                         }
                                     }
 
@@ -109,10 +108,10 @@ namespace Instant_messaging_application.Classes
                                         using (MemoryStream ms = new MemoryStream(buffer, 0, numByte))
                                         {
                                             BinaryFormatter bf = new BinaryFormatter();
-                                            // Skontam od koga je po socketu?
                                             MessageType msg = bf.Deserialize(ms) as MessageType;
-                                            Console.WriteLine(msg.Content);
-                                        }
+                                            Console.WriteLine(msg.GetText());
+                                            ChannelHandler.UserChannelMap[msg.Username].Send($"{msg.Username} -> {msg.Content}");
+                                        } 
                                     }
                                 }
 
@@ -149,7 +148,7 @@ namespace Instant_messaging_application.Classes
             socketTCP.Close();
         }
 
-        public static void Send(Socket recipient, string text)
+        /*public static void Send(Socket recipient, string text)
         {
             byte[] buffer = new byte[1024];
 
@@ -161,6 +160,6 @@ namespace Instant_messaging_application.Classes
                 buffer = ms.ToArray();
                 recipient.Send(buffer);
             }
-        }
+        }*/
     }
 }

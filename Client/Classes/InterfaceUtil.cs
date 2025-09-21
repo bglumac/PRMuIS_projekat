@@ -127,7 +127,7 @@ namespace Client.Classes
 
         public static void Chat()
         {
-            // Task.Run(() => ReceiveMessages());
+            Task.Run(() => ReceiveMessages());
             while (true)
             {
 
@@ -141,25 +141,40 @@ namespace Client.Classes
                     bf.Serialize(ms, message);
                     buffer = ms.ToArray();
                     ServerUtil.getTCPSocket().Send(buffer);
+                    Console.WriteLine(message.GetText());
                 }
             }
         }
 
-        /*private static async Task ReceiveMessages()
+        private static async Task ReceiveMessages()
         {
+            Console.WriteLine("Started listening");
             bool listening = true;
+
+            var stream = new NetworkStream(ServerUtil.getTCPSocket());
+
+
             while (listening)
             {
-                byte[] buffer = new byte[1024];
-                int numByte = ServerUtil.getTCPSocket().Receive(buffer);
-                using (MemoryStream ms = new MemoryStream(buffer, 0, numByte))
+                try
                 {
-                    BinaryFormatter bf = new BinaryFormatter();
-                    // Skontam od koga je po socketu?
-                    MessageType msg = bf.Deserialize(ms) as MessageType;
-                    Console.WriteLine(msg.Content);
+                    byte[] buffer = new byte[1024];
+                    int numByte = await stream.ReadAsync(buffer, 0, buffer.Length);
+                    using (MemoryStream ms = new MemoryStream(buffer, 0, numByte))
+                    {
+                        BinaryFormatter bf = new BinaryFormatter();
+                        // Skontam od koga je po socketu?
+                        MessageType msg = bf.Deserialize(ms) as MessageType;
+                        Console.WriteLine(msg.Content);
+                    }
                 }
+
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                
             }
-        }*/
+        }
     }
 }

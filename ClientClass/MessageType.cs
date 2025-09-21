@@ -17,13 +17,9 @@ namespace ClientClass
         public string Channel {  get; set; }
         public string Content { get; set; }
 
-        public MessageType(String message)
+        public MessageType(string username, DateTime timeSent, string channel, string content)
         {
-            this.Content = message; 
-        }
-
-        public MessageType(string username, DateTime timeSent, string channel, string content) : this(username)
-        {
+            Username = username;
             TimeSent = timeSent;
             Channel = channel;
             Content = content;
@@ -49,6 +45,11 @@ namespace ClientClass
                 BinaryFormatter bf = new BinaryFormatter();
                 return (MessageType)bf.Deserialize(ms);
             }
+        }
+
+        public string GetText()
+        {
+            return $"U: {Username}\nTime: {TimeSent.ToString()}\nChannel: {Channel}\nContent: {Content}";
         }
     }
 }

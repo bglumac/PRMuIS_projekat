@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,9 +21,14 @@ namespace Instant_messaging_application.Classes
 
         public List<Channel> Channels { get { return channels; } }
 
-        public static void JoinChannel(Channel channel, string username) {
-
+        public static void JoinChannel(Channel channel, string username, Socket s) {
+            UserChannelMap[username] = channel;
+            channel.Join(username, s);
         }
 
+        public void AddChannel(Channel channel)
+        {
+            Channels.Add(channel);
+        }
     }
 }
