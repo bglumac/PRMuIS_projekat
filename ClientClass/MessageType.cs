@@ -17,6 +17,10 @@ namespace ClientClass
         public string Channel {  get; set; }
         public string Content { get; set; }
 
+        public MessageType(String message)
+        {
+            this.Content = message; 
+        }
 
         //Serialize
         public byte[] ToBytes()

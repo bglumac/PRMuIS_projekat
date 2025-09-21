@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
+using ClientClass;
 
 namespace Instant_messaging_application.Classes
 {
@@ -23,7 +25,7 @@ namespace Instant_messaging_application.Classes
         public static async Task Init()
         {
             socketTCP = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            endpointTCP = new IPEndPoint(IPAddress.Any, 50001);
+            endpointTCP = new IPEndPoint(IPAddress.Any, 8001);
 
             socketTCP.Bind(endpointTCP);
             socketTCP.Blocking = false;
@@ -70,23 +72,38 @@ namespace Instant_messaging_application.Classes
 
                             else
                             {
-                                int numByte = s.Receive(buffer);
-                                if (numByte == 0)
+                                try
+                                {
+                                    int numByte = s.Receive(buffer);
+                                    if (numByte == 0)
+                                    {
+                                        Console.WriteLine("Client disconnected!");
+                                        s.Close();
+                                        clientSockets.Remove(s);
+
+                                        continue;
+                                    }
+                                    else
+                                    {
+                                        using (MemoryStream ms = new MemoryStream(buffer, 0, numByte))
+                                        {
+                                            BinaryFormatter bf = new BinaryFormatter();
+                                            // Skontam od koga je po socketu?
+                                            MessageType msg = bf.Deserialize(ms) as MessageType;
+                                            Console.WriteLine(msg.Content);
+                                        }
+                                    }
+                                }
+
+                                catch (Exception ex)
                                 {
                                     Console.WriteLine("Client disconnected!");
                                     s.Close();
                                     clientSockets.Remove(s);
 
-                                    continue;
+                                    continue;           
                                 }
-                                else
-                                {
-                                    using (MemoryStream ms = new MemoryStream(buffer, 0, numByte))
-                                    {
-                                        BinaryFormatter bf = new BinaryFormatter();
-                                        // Skontam od koga je po socketu?
-                                    }
-                                }
+                                
                             }
                         }
                     }
@@ -109,6 +126,20 @@ namespace Instant_messaging_application.Classes
             Console.WriteLine("Server has shut down");
             Console.ReadKey();
             socketTCP.Close();
+        }
+
+        public static void Send(Socket recipient, string text)
+        {
+            byte[] buffer = new byte[1024];
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                MessageType message = new MessageType(text);
+                bf.Serialize(ms, message);
+                buffer = ms.ToArray();
+                recipient.Send(buffer);
+            }
         }
     }
 }

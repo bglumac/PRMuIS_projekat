@@ -15,6 +15,9 @@ D:\Repositories\Personal\PRMuIS_projekat\Client\obj\Debug\Client.csproj.Generate
 D:\Repositories\Personal\PRMuIS_projekat\Client\obj\Debug\Client.csproj.CoreCompileInputs.cache
 D:\Repositories\Personal\PRMuIS_projekat\Client\obj\Debug\Client.exe
 D:\Repositories\Personal\PRMuIS_projekat\Client\obj\Debug\Client.pdb
-D:\Repositories\Personal\PRMuIS_projekat\Client\obj\Debug\Client.exe.config
 C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mreza\Projekat\PRMuIS_projekat\Client\obj\Debug\Client.Properties.Resources.resources
 C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mreza\Projekat\PRMuIS_projekat\Client\obj\Debug\Client.csproj.GenerateResource.cache
+D:\Repositories\Personal\PRMuIS_projekat\Client\bin\Debug\ClientClass.dll
+D:\Repositories\Personal\PRMuIS_projekat\Client\bin\Debug\ClientClass.pdb
+D:\Repositories\Personal\PRMuIS_projekat\Client\obj\Debug\Client.csproj.Up2Date
+D:\Repositories\Personal\PRMuIS_projekat\Client\obj\Debug\Client.exe.config

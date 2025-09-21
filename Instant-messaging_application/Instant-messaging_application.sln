@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Instant-messaging_application", "Instant-messaging_application.csproj", "{6AED6714-098E-4B90-A907-7A256F594E16}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "..\Client\Client.csproj", "{48C1A11B-68FA-4FB2-83B5-489EF97B5CF4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E00688B6-B713-40B9-91DB-83F44D4009CD} = {E00688B6-B713-40B9-91DB-83F44D4009CD}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientClass", "..\ClientClass\ClientClass.csproj", "{E00688B6-B713-40B9-91DB-83F44D4009CD}"
 EndProject

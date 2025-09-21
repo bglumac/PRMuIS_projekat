@@ -1,4 +1,5 @@
 ﻿using ClientClass;
+using Instant_messaging_application.Classes;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -36,6 +37,7 @@ namespace Instant_messaging_application
             Console.WriteLine("Instant-messaging application server!");
 
             // Task.Run(() => TCPConnectionSetup());
+            Task.Run(() => ServerUtil.Init());
 
             #region Logovanje klijenta na server
 

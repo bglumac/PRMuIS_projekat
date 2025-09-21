@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Net.WebSockets;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using ClientClass;
 
 namespace Client.Classes
 {
@@ -77,7 +82,7 @@ namespace Client.Classes
             while (!validChannel)
             {
                 //Console.Clear();
-                
+
                 Console.Write("Enter channel you want to join (use numbers): ");
                 string channel = Console.ReadLine();
                 sendBuffer = Encoding.UTF8.GetBytes(channel);
@@ -111,8 +116,49 @@ namespace Client.Classes
 
         public static void Chat()
         {
-            Console.WriteLine("To implement...");
-            Console.Read();
+            // Task.Run(() => ReceiveMessages());
+            while (true)
+            {
+
+                String text = Console.ReadLine();
+
+                byte[] buffer = new byte[1024];
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    BinaryFormatter bf = new BinaryFormatter();
+                    MessageType message = new MessageType(text);
+                    bf.Serialize(ms, message);
+                    buffer = ms.ToArray();
+                    ServerUtil.getTCPSocket().Send(buffer);
+                }
+
+                byte[] buffer2 = new byte[1024];
+                int numByte = ServerUtil.getTCPSocket().Receive(buffer2);
+                using (MemoryStream ms = new MemoryStream(buffer2, 0, numByte))
+                {
+                    BinaryFormatter bf = new BinaryFormatter();
+                    // Skontam od koga je po socketu?
+                    MessageType msg = bf.Deserialize(ms) as MessageType;
+                    Console.WriteLine(msg.Content);
+                }
+            }
         }
+
+        /*private static async Task ReceiveMessages()
+        {
+            bool listening = true;
+            while (listening)
+            {
+                byte[] buffer = new byte[1024];
+                int numByte = ServerUtil.getTCPSocket().Receive(buffer);
+                using (MemoryStream ms = new MemoryStream(buffer, 0, numByte))
+                {
+                    BinaryFormatter bf = new BinaryFormatter();
+                    // Skontam od koga je po socketu?
+                    MessageType msg = bf.Deserialize(ms) as MessageType;
+                    Console.WriteLine(msg.Content);
+                }
+            }
+        }*/
     }
 }
