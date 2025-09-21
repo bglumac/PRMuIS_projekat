@@ -110,18 +110,18 @@ namespace Instant_messaging_application
             serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, clientEP);
 
             // Posalji listu kanala
-            sendMessage = Encoding.UTF8.GetBytes("Choose a channel you would like to use:\n" + string.Join("\n", ChannelHandler.channels.Select((c, i) => $"{i + 1}. {c.name}")));
+            sendMessage = Encoding.UTF8.GetBytes("Choose a channel you would like to use:\n" + string.Join("\n", ChannelHandler.channels.Select((c, i) => $"{i + 1}. {c.name} ({c.getUnread(username)})")));
             serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, clientEP);
 
             Console.WriteLine($"New user  {username}:{clientEP}  has logged in.");
         }
 
-        private static void HandleChannelSelection(ClientData client, string message, Socket serverSocketUDP)
+        private static void HandleChannelSelection(ClientData client, string message, Socket serverSocketUDP, string username)
         {
             byte[] sendMessage;
             if (!int.TryParse(message.Trim(), out int index) || index < 1 || index > ChannelHandler.channels.Count)
             {
-                sendMessage = Encoding.UTF8.GetBytes("Invalid option. Please choose again.\n" + string.Join("\n", ChannelHandler.channels.Select((c, i) => $"{i + 1}. {c.name}")));
+                sendMessage = Encoding.UTF8.GetBytes("Invalid option. Please choose again.\n" + string.Join("\n", ChannelHandler.channels.Select((c, i) => $"{i + 1}. {c.name} ({c.getUnread(username)})")));
                 serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, client.EndPoint);
                 return;
             }
@@ -140,7 +140,7 @@ namespace Instant_messaging_application
             switch (client.Status)
             {
                 case Status.Idle:
-                    HandleChannelSelection(client, message, serverSocketUDP);
+                    HandleChannelSelection(client, message, serverSocketUDP, client.Username);
                     break;
                 case Status.Online:
                     // Broadcast jos nije implementiran

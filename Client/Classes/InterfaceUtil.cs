@@ -110,7 +110,7 @@ namespace Client.Classes
                     using (MemoryStream ms = new MemoryStream())
                     {
                         BinaryFormatter bf = new BinaryFormatter();
-                        AuthData auth = new AuthData(AuthHandler.Username, Convert.ToInt32(channel));
+                        AuthData auth = new AuthData(AuthHandler.Username, Convert.ToInt32(channel)-1);
                         bf.Serialize(ms, auth);
                         buffer = ms.ToArray();
                         ServerUtil.getTCPSocket().Send(buffer);
@@ -141,7 +141,6 @@ namespace Client.Classes
                     bf.Serialize(ms, message);
                     buffer = ms.ToArray();
                     ServerUtil.getTCPSocket().Send(buffer);
-                    Console.WriteLine(message.GetText());
                 }
             }
         }
@@ -165,7 +164,7 @@ namespace Client.Classes
                         BinaryFormatter bf = new BinaryFormatter();
                         // Skontam od koga je po socketu?
                         MessageType msg = bf.Deserialize(ms) as MessageType;
-                        Console.WriteLine(msg.Content);
+                        Console.WriteLine($"[{msg.Channel}][{msg.TimeSent.ToString("HH:mm")}] {msg.Username} -> {msg.Content}");
                     }
                 }
 

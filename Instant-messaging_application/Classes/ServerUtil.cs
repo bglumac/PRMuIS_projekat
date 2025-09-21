@@ -109,8 +109,7 @@ namespace Instant_messaging_application.Classes
                                         {
                                             BinaryFormatter bf = new BinaryFormatter();
                                             MessageType msg = bf.Deserialize(ms) as MessageType;
-                                            Console.WriteLine(msg.GetText());
-                                            ChannelHandler.UserChannelMap[msg.Username].Send($"{msg.Username} -> {msg.Content}");
+                                            ChannelHandler.UserChannelMap[msg.Username].Send(msg);
                                         } 
                                     }
                                 }
