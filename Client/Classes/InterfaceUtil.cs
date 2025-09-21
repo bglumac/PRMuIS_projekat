@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ClientClass;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Client.Classes
 {
@@ -58,6 +59,7 @@ namespace Client.Classes
                 {
                     Console.WriteLine(serverMessage);
                     AuthHandler.setLogged(true);
+                    AuthHandler.Username = username; 
                     serverRecieveEP = new IPEndPoint(IPAddress.Any, 0);
                     numBytes = ServerUtil.getUDPSocket().ReceiveFrom(recievedBuffer, ref serverRecieveEP);
                     //numBytes = ServerUtil.getUDPSocket().ReceiveFrom(recievedBuffer, ref ServerUtil.getServerEndPointUDP());
@@ -104,6 +106,15 @@ namespace Client.Classes
                     Console.WriteLine("UDP socket closed. Switching to TCP for chatting...");   // privremeno resenje dok se ne implementira TCP da konzola ostane u radu
                     ServerUtil.ConnectTCP();
                     Console.WriteLine("Povezivanje uspesno!");
+                    byte[] buffer = new byte[1024];
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        BinaryFormatter bf = new BinaryFormatter();
+                        AuthData auth = new AuthData(AuthHandler.Username, Convert.ToInt32(channel));
+                        bf.Serialize(ms, auth);
+                        buffer = ms.ToArray();
+                        ServerUtil.getTCPSocket().Send(buffer);
+                    }
                 }
                 else
                 {
@@ -126,20 +137,10 @@ namespace Client.Classes
                 using (MemoryStream ms = new MemoryStream())
                 {
                     BinaryFormatter bf = new BinaryFormatter();
-                    MessageType message = new MessageType(text);
+                    MessageType message = new MessageType(AuthHandler.Username, DateTime.Now, null, text);
                     bf.Serialize(ms, message);
                     buffer = ms.ToArray();
                     ServerUtil.getTCPSocket().Send(buffer);
-                }
-
-                byte[] buffer2 = new byte[1024];
-                int numByte = ServerUtil.getTCPSocket().Receive(buffer2);
-                using (MemoryStream ms = new MemoryStream(buffer2, 0, numByte))
-                {
-                    BinaryFormatter bf = new BinaryFormatter();
-                    // Skontam od koga je po socketu?
-                    MessageType msg = bf.Deserialize(ms) as MessageType;
-                    Console.WriteLine(msg.Content);
                 }
             }
         }

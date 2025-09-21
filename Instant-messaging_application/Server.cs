@@ -21,15 +21,7 @@ namespace Instant_messaging_application
     internal class Server
     {
         public static Dictionary<string, ClientData> clients = new Dictionary<string, ClientData>();
-
-        //public static List<ClientData> clients = new List<ClientData>();
-        public static List<string> chatChannels = new List<string>()
-        {
-            "General",
-            "Gaming",
-            "Chillzone",
-            "Music"
-        };
+        
 
         static void Main(string[] args)
         {
@@ -118,7 +110,7 @@ namespace Instant_messaging_application
             serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, clientEP);
 
             // Posalji listu kanala
-            sendMessage = Encoding.UTF8.GetBytes("Choose a channel you would like to use:\n" + string.Join("\n", chatChannels.Select((c, i) => $"{i + 1}. {c}")));
+            sendMessage = Encoding.UTF8.GetBytes("Choose a channel you would like to use:\n" + string.Join("\n", ChannelHandler.channels.Select((c, i) => $"{i + 1}. {c.name}")));
             serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, clientEP);
 
             Console.WriteLine($"New user  {username}:{clientEP}  has logged in.");
@@ -127,14 +119,14 @@ namespace Instant_messaging_application
         private static void HandleChannelSelection(ClientData client, string message, Socket serverSocketUDP)
         {
             byte[] sendMessage;
-            if (!int.TryParse(message.Trim(), out int index) || index < 1 || index > chatChannels.Count)
+            if (!int.TryParse(message.Trim(), out int index) || index < 1 || index > ChannelHandler.channels.Count)
             {
-                sendMessage = Encoding.UTF8.GetBytes("Invalid option. Please choose again.\n" + string.Join("\n", chatChannels.Select((c, i) => $"{i + 1}. {c}")));
+                sendMessage = Encoding.UTF8.GetBytes("Invalid option. Please choose again.\n" + string.Join("\n", ChannelHandler.channels.Select((c, i) => $"{i + 1}. {c.name}")));
                 serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, client.EndPoint);
                 return;
             }
 
-            client.ActiveOnChannel = chatChannels[index - 1];
+            client.ActiveOnChannel = ChannelHandler.channels[index - 1].name;
             client.Status = Status.Online;
 
             sendMessage = Encoding.UTF8.GetBytes($"Successfully joined {client.ActiveOnChannel} channel! Start chatting now!");

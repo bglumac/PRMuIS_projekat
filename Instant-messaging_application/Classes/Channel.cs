@@ -11,7 +11,7 @@ namespace Instant_messaging_application.Classes
 {
     public class Channel
     {
-        String name;
+        public String name;
         List<String> messages;
         Dictionary<String, int> lastRead;
 
@@ -31,6 +31,11 @@ namespace Instant_messaging_application.Classes
                 MessageType obj = new MessageType(message);
                 item.Value.Send(obj.ToBytes());
             }
+        }
+
+        public void Join(string username, Socket socket)
+        {
+            users.Add(username, socket);
         }
     }
 }

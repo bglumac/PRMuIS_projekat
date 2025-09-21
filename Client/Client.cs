@@ -26,8 +26,6 @@ namespace Client
             Console.WriteLine("Instant-messaging application! WELCOME!");
             Console.WriteLine("Log in to start chattng!");
 
-            List<string> channels = new List<string>();
-
             ServerUtil.Init();
             InterfaceUtil.Start();
 

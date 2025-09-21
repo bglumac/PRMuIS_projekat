@@ -22,6 +22,14 @@ namespace ClientClass
             this.Content = message; 
         }
 
+        public MessageType(string username, DateTime timeSent, string channel, string content) : this(username)
+        {
+            TimeSent = timeSent;
+            Channel = channel;
+            Content = content;
+        }
+
+
         //Serialize
         public byte[] ToBytes()
         {

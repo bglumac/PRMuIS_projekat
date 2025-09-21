@@ -20,4 +20,3 @@ C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mre
 D:\Repositories\Personal\PRMuIS_projekat\Client\bin\Debug\ClientClass.dll
 D:\Repositories\Personal\PRMuIS_projekat\Client\bin\Debug\ClientClass.pdb
 D:\Repositories\Personal\PRMuIS_projekat\Client\obj\Debug\Client.csproj.Up2Date
-D:\Repositories\Personal\PRMuIS_projekat\Client\obj\Debug\Client.exe.config

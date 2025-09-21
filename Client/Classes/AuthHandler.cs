@@ -9,7 +9,12 @@ namespace Client.Classes
 {
     public class AuthHandler
     {
+        static string username = null;
+        static int channel = 0;
+
         private static bool logged = false;
+
+        public static string Username { get => username; set => username = value; }
 
         public static void setLogged(bool logged)
         {
@@ -18,7 +23,7 @@ namespace Client.Classes
 
         public static bool getLogged()
         {
-            return logged; 
+            return logged;
         }
     }
 }

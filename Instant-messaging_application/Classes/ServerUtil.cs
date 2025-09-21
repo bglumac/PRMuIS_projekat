@@ -21,6 +21,7 @@ namespace Instant_messaging_application.Classes
         public static IPEndPoint endpointTCP;
 
         static List<Socket> clientSockets = new List<Socket>();
+        static Dictionary<Socket, bool> authList = new Dictionary<Socket, bool>();
 
         public static async Task Init()
         {
@@ -66,6 +67,10 @@ namespace Instant_messaging_application.Classes
                             {
                                 Socket client = socketTCP.Accept();
                                 client.Blocking = false;
+
+                                authList.Add(client, false);
+
+
                                 clientSockets.Add(client);
                                 Console.WriteLine($"Client connected: {client.RemoteEndPoint}");
                             }
@@ -74,8 +79,23 @@ namespace Instant_messaging_application.Classes
                             {
                                 try
                                 {
+                                    bool isAuth = false;
                                     int numByte = s.Receive(buffer);
-                                    if (numByte == 0)
+                                    if (authList.TryGetValue(s, out isAuth))
+                                    {
+   
+                                        using (MemoryStream ms = new MemoryStream(buffer, 0, numByte))
+                                        {
+                                            BinaryFormatter bf = new BinaryFormatter();
+                                            // Skontam od koga je po socketu?
+                                            AuthData data = bf.Deserialize(ms) as AuthData;
+                                            authList.Add(s, true);
+                                            Console.WriteLine(data.Username + " connected to " + ChannelHandler.channels[data.Channel_idx].name);
+                                        }
+                                    }
+
+                                    
+                                    else if (numByte == 0)
                                     {
                                         Console.WriteLine("Client disconnected!");
                                         s.Close();
