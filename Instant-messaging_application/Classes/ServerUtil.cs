@@ -89,8 +89,9 @@ namespace Instant_messaging_application.Classes
                                             BinaryFormatter bf = new BinaryFormatter();
                                             // Skontam od koga je po socketu?
                                             AuthData data = bf.Deserialize(ms) as AuthData;
-                                            authList.Add(s, true);
+                                            authList[s] = true; //sad ispise sve ali pukne na 93
                                             Console.WriteLine(data.Username + " connected to " + ChannelHandler.channels[data.Channel_idx].name);
+                                            Console.WriteLine("HAAALo");
                                         }
                                     }
 
