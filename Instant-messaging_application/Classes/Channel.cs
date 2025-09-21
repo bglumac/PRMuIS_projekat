@@ -9,6 +9,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using ClientClass;
+using Crypto;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Instant_messaging_application.Classes
@@ -40,6 +41,8 @@ namespace Instant_messaging_application.Classes
                     BinaryFormatter bf = new BinaryFormatter();
                     bf.Serialize(ms, message);
                     buffer = ms.ToArray();
+                    Console.WriteLine("Msg " +message.GetText());
+                    buffer = Vizner.Encrypt(buffer);
                     item.Value.Send(buffer);
                     messages.Add(message);
                 }

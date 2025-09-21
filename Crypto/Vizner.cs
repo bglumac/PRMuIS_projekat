@@ -8,57 +8,33 @@ namespace Crypto
 {
     public class Vizner
     {
-        public static string Encrypt(string message)
+        public static byte[] Encrypt(byte[] message)
         {
             string key = "LEMON";
 
-            message = message.ToUpper();
-            key = key.ToUpper();
+            byte[] result = new byte[message.Length];
+            byte[] keyBytes = Encoding.UTF8.GetBytes(key);
 
-            int messLen = message.Length;
-            int kljucLen = key.Length;
-
-            char[] encrypted = new char[messLen];
-
-            string extendedKey = "";
-            for (int i = 0; i < messLen; i++)
-                extendedKey += key[i % kljucLen];
-
-            for (int i = 0; i < messLen; i++)
+            for (int i = 0; i < message.Length; i++)
             {
-                int m = message[i] - 'A';
-                int k = extendedKey[i] - 'A';
-                encrypted[i] = (char)((m + k) % 26 + 'A');
+                result[i] = (byte)((message[i] + keyBytes[i % keyBytes.Length]) % 256);
             }
 
-            return new string(encrypted);
+            return result;
         }
 
-        public static string Decrypt(string cipherText)
+        public static byte[] Decrypt(byte[] data)
         {
             string key = "LEMON";
+            byte[] result = new byte[data.Length];
+            byte[] keyBytes = Encoding.UTF8.GetBytes(key);
 
-            cipherText = cipherText.ToUpper();
-            key = key.ToUpper();
-
-            int textLen = cipherText.Length;
-            int kljucLen = key.Length;
-
-            char[] decrypted = new char[textLen];
-
-            // produženi ključ
-            string extendedKey = "";
-            for (int i = 0; i < textLen; i++)
-                extendedKey += key[i % kljucLen];
-
-            for (int i = 0; i < textLen; i++)
+            for (int i = 0; i < data.Length; i++)
             {
-                int c = cipherText[i] - 'A';
-                int k = extendedKey[i] - 'A';
-                decrypted[i] = (char)((c - k + 26) % 26 + 'A'); 
+                result[i] = (byte)((256 + data[i] - keyBytes[i % keyBytes.Length]) % 256);
             }
 
-            return new string(decrypted);
+            return result;
         }
 
 

@@ -1,4 +1,5 @@
 ﻿using ClientClass;
+using Crypto;
 using Instant_messaging_application.Classes;
 using System;
 using System.Collections.Generic;
@@ -48,7 +49,10 @@ namespace Instant_messaging_application
                 {
                     EndPoint clientEP = new IPEndPoint(IPAddress.Any, 0);
                     numBytes = serverSocketUDP.ReceiveFrom(buffer, ref clientEP);
-                    string message = Encoding.UTF8.GetString(buffer, 0, numBytes);
+                    byte[] recieved = buffer.Take(numBytes).ToArray();
+                    byte[] dekriptovani = Vizner.Decrypt(recieved); 
+                    string message = Encoding.UTF8.GetString(dekriptovani);
+                    
 
                     var client = clients.Values.FirstOrDefault(c => c.EndPoint.Equals(clientEP));
 
@@ -84,6 +88,7 @@ namespace Instant_messaging_application
             if(parts.Length != 2)
             {
                 sendMessage = Encoding.UTF8.GetBytes("Login format must be: username|password. Try again.");
+                sendMessage = Vizner.Encrypt(sendMessage);
                 serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, clientEP);
                 return;
             }
@@ -94,6 +99,7 @@ namespace Instant_messaging_application
             if (clients.ContainsKey(username))
             {
                 sendMessage = Encoding.UTF8.GetBytes($"User {username} is already logged in!");
+                sendMessage = Vizner.Encrypt(sendMessage);
                 serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, clientEP);
                 return;
             }
@@ -107,10 +113,12 @@ namespace Instant_messaging_application
             clients[username] = newClient;
 
             sendMessage = Encoding.UTF8.GetBytes("Welcome to the Instant-messaging server!");
+            sendMessage = Vizner.Encrypt(sendMessage);
             serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, clientEP);
 
             // Posalji listu kanala
             sendMessage = Encoding.UTF8.GetBytes("Choose a channel you would like to use:\n" + string.Join("\n", ChannelHandler.channels.Select((c, i) => $"{i + 1}. {c.name} ({c.getUnread(username)})")));
+            sendMessage = Vizner.Encrypt(sendMessage);
             serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, clientEP);
 
             Console.WriteLine($"New user  {username}:{clientEP}  has logged in.");
@@ -122,6 +130,7 @@ namespace Instant_messaging_application
             if (!int.TryParse(message.Trim(), out int index) || index < 1 || index > ChannelHandler.channels.Count)
             {
                 sendMessage = Encoding.UTF8.GetBytes("Invalid option. Please choose again.\n" + string.Join("\n", ChannelHandler.channels.Select((c, i) => $"{i + 1}. {c.name} ({c.getUnread(username)})")));
+                sendMessage = Vizner.Encrypt(sendMessage);
                 serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, client.EndPoint);
                 return;
             }
@@ -130,6 +139,7 @@ namespace Instant_messaging_application
             client.Status = Status.Online;
 
             sendMessage = Encoding.UTF8.GetBytes($"Successfully joined {client.ActiveOnChannel} channel! Start chatting now!");
+            sendMessage = Vizner.Encrypt(sendMessage);
             serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, client.EndPoint);
 
             Console.WriteLine($"User  {client.Username}  joined  {client.ActiveOnChannel}  channel.");
@@ -145,6 +155,7 @@ namespace Instant_messaging_application
                 case Status.Online:
                     // Broadcast jos nije implementiran
                     byte[] msg = Encoding.UTF8.GetBytes($"[{client.ActiveOnChannel}] {client.Username}: {message}");
+                    msg = Vizner.Encrypt(msg);
                     serverSocketUDP.SendTo(msg, 0, msg.Length, SocketFlags.None, client.EndPoint);
                     break;
             }

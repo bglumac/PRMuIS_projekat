@@ -59,6 +59,13 @@
       <Project>{e00688b6-b713-40b9-91db-83f44d4009cd}</Project>
       <Name>ClientClass</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Crypto\Crypto.csproj">
+      <Project>{1ffebbe2-f2b1-4a0e-bee6-b933a1e7391f}</Project>
+      <Name>Crypto</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

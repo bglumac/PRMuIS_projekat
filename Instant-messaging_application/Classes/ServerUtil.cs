@@ -9,6 +9,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using ClientClass;
+using Crypto;
 
 namespace Instant_messaging_application.Classes
 {
@@ -79,11 +80,15 @@ namespace Instant_messaging_application.Classes
                                 try
                                 {
                                     int numByte = s.Receive(buffer);
+                                    byte[] recieved = buffer.Take(numByte).ToArray();
+                                    byte[] dekriptovan = Vizner.Decrypt(recieved);
+
                                     if (!authList[s])
                                     {
 
                                         Console.WriteLine("Authenticating...");
-                                        using (MemoryStream ms = new MemoryStream(buffer, 0, numByte))
+                                        
+                                        using (MemoryStream ms = new MemoryStream(dekriptovan, 0, numByte))
                                         {
                                             BinaryFormatter bf = new BinaryFormatter();
                                             // Skontam od koga je po socketu?
@@ -105,7 +110,9 @@ namespace Instant_messaging_application.Classes
                                     }
                                     else
                                     {
-                                        using (MemoryStream ms = new MemoryStream(buffer, 0, numByte))
+                                        recieved = buffer.Take(numByte).ToArray();
+                                        dekriptovan = Vizner.Decrypt(recieved);
+                                        using (MemoryStream ms = new MemoryStream(dekriptovan, 0, numByte))
                                         {
                                             BinaryFormatter bf = new BinaryFormatter();
                                             MessageType msg = bf.Deserialize(ms) as MessageType;

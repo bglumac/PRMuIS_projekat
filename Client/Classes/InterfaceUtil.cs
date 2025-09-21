@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ClientClass;
+using Crypto;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Client.Classes
@@ -44,7 +45,8 @@ namespace Client.Classes
                 //u ovom formatu saljemo serveru podatke
                 string clientData = username + '|' + password;
                 sendBuffer = Encoding.UTF8.GetBytes(clientData);
-
+                //enkripcija
+                sendBuffer = Vizner.Encrypt(sendBuffer);
 
                 Console.WriteLine("Sending data?");
                 ServerUtil.getUDPSocket().SendTo(sendBuffer, 0, sendBuffer.Length, SocketFlags.None, ServerUtil.getServerEndPointUDP());
@@ -52,8 +54,10 @@ namespace Client.Classes
 
                 EndPoint serverRecieveEP = new IPEndPoint(IPAddress.Any, 0);
                 numBytes = ServerUtil.getUDPSocket().ReceiveFrom(recievedBuffer, ref serverRecieveEP);
+                byte[] recieved = recievedBuffer.Take(numBytes).ToArray();
+                byte[] dekriptovan = Vizner.Decrypt(recieved);
                 //numBytes = ServerUtil.getUDPSocket().ReceiveFrom(recievedBuffer, ref ServerUtil.getServerEndPointUDP());
-                serverMessage = Encoding.UTF8.GetString(recievedBuffer, 0, numBytes);
+                serverMessage = Encoding.UTF8.GetString(dekriptovan);
 
                 if (serverMessage.Contains("Welcome to the Instant-messaging server!"))
                 {
@@ -62,8 +66,10 @@ namespace Client.Classes
                     AuthHandler.Username = username; 
                     serverRecieveEP = new IPEndPoint(IPAddress.Any, 0);
                     numBytes = ServerUtil.getUDPSocket().ReceiveFrom(recievedBuffer, ref serverRecieveEP);
+                    recieved = recievedBuffer.Take(numBytes).ToArray();
+                    dekriptovan = Vizner.Decrypt(recieved);
                     //numBytes = ServerUtil.getUDPSocket().ReceiveFrom(recievedBuffer, ref ServerUtil.getServerEndPointUDP());
-                    serverMessage = Encoding.UTF8.GetString(recievedBuffer, 0, numBytes);
+                    serverMessage = Encoding.UTF8.GetString(dekriptovan);
                     Console.WriteLine(serverMessage);
                 }
                 else
@@ -87,14 +93,19 @@ namespace Client.Classes
 
                 Console.Write("Enter channel you want to join (use numbers): ");
                 string channel = Console.ReadLine();
+
                 sendBuffer = Encoding.UTF8.GetBytes(channel);
+                //enkripcija
+                sendBuffer = Vizner.Encrypt(sendBuffer);
                 ServerUtil.getUDPSocket().SendTo(sendBuffer, 0, sendBuffer.Length, SocketFlags.None, ServerUtil.getServerEndPointUDP());
 
 
                 EndPoint serverRecieveEP = new IPEndPoint(IPAddress.Any, 0);
                 numBytes = ServerUtil.getUDPSocket().ReceiveFrom(recievedBuffer, ref serverRecieveEP);
+                byte[] recieved = recievedBuffer.Take(numBytes).ToArray();
+                byte[] dekriptovan = Vizner.Decrypt(recieved);
                 //numBytes = ServerUtil.getUDPSocket().ReceiveFrom(recievedBuffer, ref ServerUtil.getServerEndPointUDP());
-                serverMessage = Encoding.UTF8.GetString(recievedBuffer, 0, numBytes);
+                serverMessage = Encoding.UTF8.GetString(dekriptovan);
 
                 if (serverMessage.Contains("Successfully"))
                 {
@@ -113,6 +124,7 @@ namespace Client.Classes
                         AuthData auth = new AuthData(AuthHandler.Username, Convert.ToInt32(channel)-1);
                         bf.Serialize(ms, auth);
                         buffer = ms.ToArray();
+                        buffer = Vizner.Encrypt(buffer);        //enkripcija 
                         ServerUtil.getTCPSocket().Send(buffer);
                     }
                 }
@@ -140,6 +152,7 @@ namespace Client.Classes
                     MessageType message = new MessageType(AuthHandler.Username, DateTime.Now, null, text);
                     bf.Serialize(ms, message);
                     buffer = ms.ToArray();
+                    buffer = Vizner.Encrypt(buffer);
                     ServerUtil.getTCPSocket().Send(buffer);
                 }
             }
@@ -159,7 +172,10 @@ namespace Client.Classes
                 {
                     byte[] buffer = new byte[1024];
                     int numByte = await stream.ReadAsync(buffer, 0, buffer.Length);
-                    using (MemoryStream ms = new MemoryStream(buffer, 0, numByte))
+                    byte[] recived = buffer.Take(numByte).ToArray();
+                    Console.WriteLine($"Received {numByte} {recived}");
+                    byte[] dekriptovan = Vizner.Decrypt(recived);
+                    using (MemoryStream ms = new MemoryStream(dekriptovan))
                     {
                         BinaryFormatter bf = new BinaryFormatter();
                         // Skontam od koga je po socketu?
