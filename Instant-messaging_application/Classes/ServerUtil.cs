@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ClientClass;
 using Crypto;
+using Microsoft.Win32;
 
 namespace Instant_messaging_application.Classes
 {
@@ -34,13 +35,15 @@ namespace Instant_messaging_application.Classes
             int maxKlijenata = 100;
             socketTCP.Listen(maxKlijenata);
 
-            Console.WriteLine($"Listening on: {endpointTCP}");
+            // Console.WriteLine($"Listening on: {endpointTCP}");
+            Logger.Log($"Listening on: {endpointTCP}");
 
             byte[] buffer = new byte[1024];
 
             try
             {
-                Console.WriteLine("Server is running!");
+                // Console.WriteLine("Server is running!");
+                Logger.Log("Server is running!");
                 while (true)
                 {
                     List<Socket> checkRead = new List<Socket>();
@@ -61,6 +64,8 @@ namespace Instant_messaging_application.Classes
 
                     if (checkRead.Count > 0)
                     {
+                        // Console.WriteLine("Dogadjaji " + checkRead.Count);
+                        Logger.Log("Dogadjaji " + checkRead.Count);
                         foreach (Socket s in checkRead)
                         {
                             if (s == socketTCP)
@@ -70,9 +75,9 @@ namespace Instant_messaging_application.Classes
 
                                 authList.Add(client, false);
 
-
                                 clientSockets.Add(client);
-                                Console.WriteLine($"Client connected: {client.RemoteEndPoint}");
+                                // Console.WriteLine($"Client connected: {client.RemoteEndPoint}");
+                                Logger.Log($"Client connected: {client.RemoteEndPoint}");
                             }
 
                             else
@@ -86,28 +91,28 @@ namespace Instant_messaging_application.Classes
                                     if (!authList[s])
                                     {
 
-                                        Console.WriteLine("Authenticating...");
-                                        
+                                        // Console.WriteLine("Authenticating...");
+                                        Logger.Log("Authenticating...");
+
                                         using (MemoryStream ms = new MemoryStream(dekriptovan, 0, numByte))
                                         {
                                             BinaryFormatter bf = new BinaryFormatter();
                                             // Skontam od koga je po socketu?
                                             AuthData data = bf.Deserialize(ms) as AuthData;
                                             authList[s] = true; //sad ispise sve ali pukne na 93
-                                            Console.WriteLine(data.Username + " connected to " + ChannelHandler.channels[data.Channel_idx].name);
+                                            // Console.WriteLine(data.Username + " connected to " + ChannelHandler.channels[data.Channel_idx].name);
+                                            Logger.Log(data.Username + " connected to " + ChannelHandler.channels[data.Channel_idx].name);
                                             ChannelHandler.JoinChannel(ChannelHandler.channels[data.Channel_idx], data.Username, s);
                                         }
                                     }
 
-                                    
-                                    else if (numByte == 0)
-                                    {
-                                        Console.WriteLine("Client disconnected!");
-                                        s.Close();
-                                        clientSockets.Remove(s);
 
+                                    else if (numByte == 0)
+                                    { 
+                                        GracefulDisconnect(s);
                                         continue;
                                     }
+
                                     else
                                     {
                                         recieved = buffer.Take(numByte).ToArray();
@@ -123,10 +128,8 @@ namespace Instant_messaging_application.Classes
 
                                 catch (Exception ex)
                                 {
-                                    Console.WriteLine("Client disconnected!");
-                                    s.Close();
-                                    clientSockets.Remove(s);
-
+                                    GracefulDisconnect(s);
+                                   
                                     continue;           
                                 }
                                 
@@ -140,7 +143,8 @@ namespace Instant_messaging_application.Classes
 
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                // Console.WriteLine(ex.Message);
+                Logger.Log(ex.Message);
             }
 
             foreach (Socket s in clientSockets)
@@ -149,23 +153,39 @@ namespace Instant_messaging_application.Classes
                 s.Close();
             }
 
-            Console.WriteLine("Server has shut down");
+            // Console.WriteLine("Server has shut down");
+            Logger.Log("Server has shut down");
             Console.ReadKey();
             socketTCP.Close();
         }
 
-        /*public static void Send(Socket recipient, string text)
+        public static void GracefulDisconnect(Socket s)
         {
-            byte[] buffer = new byte[1024];
-
-            using (MemoryStream ms = new MemoryStream())
+            s.Close();
+            authList.Remove(s);
+            clientSockets.Remove(s);
+            
+            foreach (var channel in ChannelHandler.channels)
             {
-                BinaryFormatter bf = new BinaryFormatter();
-                MessageType message = new MessageType(text);
-                bf.Serialize(ms, message);
-                buffer = ms.ToArray();
-                recipient.Send(buffer);
+                string toRemove = null;
+                foreach (var user in channel.users)
+                {
+                    if (user.Value == s)
+                    {
+                        toRemove = user.Key;
+                    }
+                }
+                if (toRemove == null) continue;
+
+                channel.users[toRemove] = null;
+
+                ClientHandler.clients[toRemove].Status = Status.Offline;
             }
-        }*/
+
+            // Console.WriteLine("Client disconnected!");
+            Logger.Log("Client disconnected!");
+
+        }
     }
-}
+    }
+

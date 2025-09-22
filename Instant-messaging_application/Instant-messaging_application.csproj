@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Classes\Channel.cs" />
     <Compile Include="Classes\ChannelHandler.cs" />
+    <Compile Include="Classes\ClientHandler.cs" />
     <Compile Include="Classes\InterfaceUtil.cs" />
     <Compile Include="Classes\Logger.cs" />
     <Compile Include="Classes\ServerUtil.cs" />

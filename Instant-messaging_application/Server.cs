@@ -20,14 +20,13 @@ using System.Threading.Tasks;
 namespace Instant_messaging_application
 {
     internal class Server
-    {
-        public static Dictionary<string, ClientData> clients = new Dictionary<string, ClientData>();
-        
+    { 
 
         static void Main(string[] args)
         {
             Console.Title = "Server";
-            Console.WriteLine("Instant-messaging application server!");
+            Task.Run(() => InterfaceUtil.Start());
+            
 
             // Task.Run(() => TCPConnectionSetup());
             Task.Run(() => ServerUtil.Init());
@@ -38,7 +37,9 @@ namespace Instant_messaging_application
             IPEndPoint serverEP = new IPEndPoint(IPAddress.Any, 50000);
             serverSocketUDP.Bind(serverEP);
 
-            Console.WriteLine($"Server initialized and waiting on: {serverEP}");
+            // Console.WriteLine($"Server initialized and waiting on: {serverEP}");
+            Logger.Log($"Server initialized and waiting on: {serverEP}");
+            
 
             byte[] buffer = new byte[5000];         //buffer za prijem poruka od klijenta
             int numBytes;
@@ -54,7 +55,7 @@ namespace Instant_messaging_application
                     string message = Encoding.UTF8.GetString(dekriptovani);
                     
 
-                    var client = clients.Values.FirstOrDefault(c => c.EndPoint.Equals(clientEP));
+                    var client = ClientHandler.clients.Values.FirstOrDefault(c => c.EndPoint.Equals(clientEP));
 
                     if (client == null)
                     {
@@ -67,13 +68,17 @@ namespace Instant_messaging_application
                 }
                 catch (SocketException e)
                 {
-                    Console.WriteLine($"Socket error: {e.Message}");
+                    // Console.WriteLine($"Socket error: {e.Message}");
+                    Logger.Log($"Socket error: {e.Message}");
                 }
-
+                /*
                 Console.Write(new string('=', 10));
                 Console.Write(" CURRENT SERVER STATE ");
                 Console.WriteLine(new string('=', 10));
-                PrintClients(clients.Values.ToList()); 
+                PrintClients(ClientHandler.clients.Values.ToList()); */
+                Logger.Log(new string('=', 10));
+                Logger.Log(" CURRENT SERVER STATE ");
+                Logger.Log(new string('=', 10));
 
             }
 
@@ -96,12 +101,23 @@ namespace Instant_messaging_application
             string username = parts[0];
             string password = parts[1];
 
-            if (clients.ContainsKey(username))
+            if (ClientHandler.clients.ContainsKey(username) && ClientHandler.clients[username].Status != Status.Offline)
             {
                 sendMessage = Encoding.UTF8.GetBytes($"User {username} is already logged in!");
                 sendMessage = Vizner.Encrypt(sendMessage);
                 serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, clientEP);
                 return;
+            }
+
+            else if(ClientHandler.clients.ContainsKey(username) && ClientHandler.clients[username].Status == Status.Offline)
+            {
+                if (ClientHandler.clients[username].Password != password)
+                {
+                    sendMessage = Encoding.UTF8.GetBytes($"Wrong password!");
+                    sendMessage = Vizner.Encrypt(sendMessage);
+                    serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, clientEP);
+                    return;
+                }
             }
 
             var newClient = new ClientData(username, password)
@@ -110,7 +126,9 @@ namespace Instant_messaging_application
                 Status = Status.Idle,
                 TimeLoggedIn = DateTime.Now
             };
-            clients[username] = newClient;
+
+            ClientHandler.clients[username] = newClient;
+
 
             sendMessage = Encoding.UTF8.GetBytes("Welcome to the Instant-messaging server!");
             sendMessage = Vizner.Encrypt(sendMessage);
@@ -121,7 +139,8 @@ namespace Instant_messaging_application
             sendMessage = Vizner.Encrypt(sendMessage);
             serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, clientEP);
 
-            Console.WriteLine($"New user  {username}:{clientEP}  has logged in.");
+            // Console.WriteLine($"New user  {username}:{clientEP}  has logged in.");
+            Logger.Log($"New user  {username}:{clientEP}  has logged in.");
         }
 
         private static void HandleChannelSelection(ClientData client, string message, Socket serverSocketUDP, string username)
@@ -135,6 +154,7 @@ namespace Instant_messaging_application
                 return;
             }
 
+            ChannelHandler.channels[index - 1].setUnread(username);
             client.ActiveOnChannel = ChannelHandler.channels[index - 1].name;
             client.Status = Status.Online;
 
@@ -142,7 +162,8 @@ namespace Instant_messaging_application
             sendMessage = Vizner.Encrypt(sendMessage);
             serverSocketUDP.SendTo(sendMessage, 0, sendMessage.Length, SocketFlags.None, client.EndPoint);
 
-            Console.WriteLine($"User  {client.Username}  joined  {client.ActiveOnChannel}  channel.");
+            // Console.WriteLine($"User  {client.Username}  joined  {client.ActiveOnChannel}  channel.");
+            Logger.Log($"User  {client.Username}  joined  {client.ActiveOnChannel}  channel.");
         }
 
         public static void HandleClientMessage(ClientData client, string message, Socket serverSocketUDP)
@@ -160,38 +181,6 @@ namespace Instant_messaging_application
                     break;
             }
 
-        }
-
-        public static void PrintClients(List<ClientData> clients)
-        {
-            if (clients == null || clients.Count == 0)
-            {
-                Console.WriteLine("No clients to display.");
-                return;
-            }
-
-            Console.WriteLine("{0,-15}{1,-15}{2,-10}{3,-22}{4,-20}{5}",
-                "Username", "Password", "Status", "IP Address", "Channel", "Logged in time");
-
-            Console.WriteLine(new string('-', 100));
-
-            string currentTime = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
-
-            foreach (var c in clients)
-            {
-                if (c == null) continue;
-
-                Console.WriteLine("{0,-15}{1,-15}{2,-10}{3,-22}{4,-20}{5}",
-                    c.Username,
-                    c.Password,
-                    c.Status,
-                    c.EndPoint?.ToString() ?? "N/A",
-                    c.ActiveOnChannel ?? "None",
-                    c.TimeLoggedIn 
-                );
-            }
-
-            Console.WriteLine(new string('-', 100));
         }
     }
 }

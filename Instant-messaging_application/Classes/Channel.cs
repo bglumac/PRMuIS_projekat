@@ -20,7 +20,7 @@ namespace Instant_messaging_application.Classes
         List<MessageType> messages;
         Dictionary<string, int> lastRead;
 
-        public static Dictionary<string, Socket> users = new Dictionary<string, Socket>();
+        public Dictionary<string, Socket> users = new Dictionary<string, Socket>();
 
         public Channel(String name)
         {
@@ -32,26 +32,44 @@ namespace Instant_messaging_application.Classes
         public void Send(MessageType message)
         {
             message.Channel = this.name;
+            List<string> toRemove = new List<string>();
             foreach (var item in users)
-
             {
-                byte[] buffer = new byte[1024];
-                using (MemoryStream ms = new MemoryStream())
+                try
                 {
-                    BinaryFormatter bf = new BinaryFormatter();
-                    bf.Serialize(ms, message);
-                    buffer = ms.ToArray();
-                    Console.WriteLine("Msg " +message.GetText());
-                    buffer = Vizner.Encrypt(buffer);
-                    item.Value.Send(buffer);
-                    messages.Add(message);
+                    if (item.Value == null) continue;
+                    byte[] buffer = new byte[1024];
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        BinaryFormatter bf = new BinaryFormatter();
+                        bf.Serialize(ms, message);
+                        buffer = ms.ToArray();
+                        buffer = Vizner.Encrypt(buffer);
+                        item.Value.Send(buffer);
+                        messages.Add(message);
+                        setUnread(message.Username);
+                    }
+                }
+
+                catch (Exception ex)
+                {
+                    toRemove.Add(item.Key);
                 }
             }
+
+            foreach (var idx in toRemove) {
+                users[idx] = null;
+            }
+        }
+
+        public List<MessageType> getMessages()
+        {
+            return messages;
         }
 
         public void Join(string username, Socket socket)
         {
-            users.Add(username, socket);
+            users[username] = socket;
         }
 
         public int getUnread(string username)
@@ -62,6 +80,16 @@ namespace Instant_messaging_application.Classes
             }
 
             return messages.Count;
+        }
+
+        public void setUnread(string username)
+        {
+            lastRead[username] = messages.Count;
+        }
+
+        public void Disconnect(string username)
+        {
+            users[username] = null;
         }
     }
 }

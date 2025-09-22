@@ -8,12 +8,12 @@ namespace Instant_messaging_application.Classes
 {
     public class Logger
     {
-        Queue<string> logs = new Queue<string>();
-        public void Log(string message)
+        public static Queue<string> logs = new Queue<string>();
+        public static void Log(string message)
         {
-            logs.Append(message);
+            logs.Enqueue(message);
         }
 
-        public Queue<string> GetLogs() { return logs; }
+        public static Queue<string> GetLogs() { return logs; }
     }
 }

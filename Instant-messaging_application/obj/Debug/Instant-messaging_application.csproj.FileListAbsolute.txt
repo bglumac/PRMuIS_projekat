@@ -18,7 +18,9 @@ D:\Repositories\Personal\PRMuIS_projekat\Instant-messaging_application\obj\Debug
 D:\Repositories\Personal\PRMuIS_projekat\Instant-messaging_application\obj\Debug\Instant-.D0DF7918.Up2Date
 D:\Repositories\Personal\PRMuIS_projekat\Instant-messaging_application\obj\Debug\Instant-messaging_application.exe
 D:\Repositories\Personal\PRMuIS_projekat\Instant-messaging_application\obj\Debug\Instant-messaging_application.pdb
-D:\Repositories\Personal\PRMuIS_projekat\Instant-messaging_application\obj\Debug\Instant-messaging_application.exe.config
 C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mreza\Projekat\PRMuIS_projekat\Instant-messaging_application\bin\Debug\Crypto.dll
 C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mreza\Projekat\PRMuIS_projekat\Instant-messaging_application\bin\Debug\Crypto.pdb
 C:\Users\Bojana\Documents\Fakultet\III_godina\5.semestar\Primena racunarskih mreza\Projekat\PRMuIS_projekat\Instant-messaging_application\obj\Debug\Instant-messaging_application.exe.config
+D:\Repositories\Personal\PRMuIS_projekat\Instant-messaging_application\bin\Debug\Crypto.dll
+D:\Repositories\Personal\PRMuIS_projekat\Instant-messaging_application\bin\Debug\Crypto.pdb
+D:\Repositories\Personal\PRMuIS_projekat\Instant-messaging_application\obj\Debug\Instant-messaging_application.exe.config

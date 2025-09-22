@@ -30,5 +30,10 @@ namespace Instant_messaging_application.Classes
         {
             Channels.Add(channel);
         }
+
+        public static void Leave(string username)
+        {
+            UserChannelMap[username].Disconnect(username);
+        }
     }
 }

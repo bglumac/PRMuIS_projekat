@@ -4,14 +4,49 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ClientClass;
 
 namespace Instant_messaging_application.Classes
 {
     public class InterfaceUtil
     {
-        public static void Start()
+        public static async void Start()
         {
             // Init
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("====== SERVER ======");
+                Console.WriteLine("1. Add Channel");
+                Console.WriteLine("2. Logs");
+                Console.WriteLine("3. Messages");
+
+                string choice = Console.ReadLine();
+                try
+                {
+                    int select = Convert.ToInt32(choice);
+                    if (select == 1)
+                    {
+                        AddChannel();
+                    }
+
+                    else if (select == 2)
+                    {
+                        Logs();
+                    }
+
+                    else if (select == 3)
+                    {
+                        Messages();
+                    }
+
+                    else
+                    {
+                        continue;
+                    }
+                }
+                catch { continue; }
+            }
         }
 
         public static void AddChannel()
@@ -24,6 +59,7 @@ namespace Instant_messaging_application.Classes
 
             while (!valid)
             {
+                Console.Clear();
                 Console.Write("Enter a new channel name: ");
                 string name = Console.ReadLine();
 
@@ -46,27 +82,22 @@ namespace Instant_messaging_application.Classes
             }
         }
 
-        public static void Logs(Queue<string> logs)
+        public static void Logs()
         {
-            // Clear Logs
-            // Go through the whole fucking stack
-            // If empty, wait. If not. Print!!!
-
-            // Clear
-            // while (true) {
-            // if (logs.count >0)
-            // thread.sleep(1000)
-
             Console.Clear();
+            Console.WriteLine("Starting logger...");
 
             while (true)
             {
-                if(logs.Count == 0)
+
+                Queue<string> logs = Logger.GetLogs();
+                if (logs.Count == 0)
                 {
-                    Thread.Sleep(1000);
+                    Thread.Sleep(500);
                     continue;
                 }
 
+                
                 while(logs.Count > 0)
                 {
                     string msg = logs.Dequeue();
@@ -74,6 +105,42 @@ namespace Instant_messaging_application.Classes
                 }
             }
 
+        }
+
+        public static void Messages()
+        {
+            Console.Clear();
+            bool valid = false;
+            while (!valid) {
+                Console.Clear();
+                for (int i = 0; i < ChannelHandler.channels.Count; i++)
+                {
+                    Console.WriteLine($"{i + 1}. {ChannelHandler.channels[i].name}");
+                }
+
+                try
+                {
+                    int choice = Convert.ToInt32(Console.ReadLine()) - 1;
+                    ReadMessages(ChannelHandler.channels[choice].getMessages());
+                    valid = true;
+                }
+
+                catch
+                {
+                    continue;
+                }
+            }
+            
+        }
+
+        public static void ReadMessages(List<MessageType> messages)
+        {
+            foreach (MessageType message in messages)
+            {
+                Console.WriteLine(message.GetReadable());
+            }
+
+            Console.ReadLine();
         }
     }
 }

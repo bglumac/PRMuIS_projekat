@@ -164,8 +164,6 @@ namespace Client.Classes
             bool listening = true;
 
             var stream = new NetworkStream(ServerUtil.getTCPSocket());
-
-
             while (listening)
             {
                 try
@@ -173,7 +171,6 @@ namespace Client.Classes
                     byte[] buffer = new byte[1024];
                     int numByte = await stream.ReadAsync(buffer, 0, buffer.Length);
                     byte[] recived = buffer.Take(numByte).ToArray();
-                    Console.WriteLine($"Received {numByte} {recived}");
                     byte[] dekriptovan = Vizner.Decrypt(recived);
                     using (MemoryStream ms = new MemoryStream(dekriptovan))
                     {
