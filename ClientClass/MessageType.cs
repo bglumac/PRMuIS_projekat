@@ -55,7 +55,7 @@ namespace ClientClass
 
         public string GetReadable()
         {
-            return $"[{Channel}][{TimeSent.ToString("HH:mm")}] {Username} -> {Content}";
+            return $"[{Channel}][{TimeSent.ToString("dd/MM/yyyy | HH:mm")}] {Username} -> {Content}";
         }
     }
 }

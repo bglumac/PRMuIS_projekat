@@ -154,7 +154,6 @@ namespace Instant_messaging_application
                 return;
             }
 
-            ChannelHandler.channels[index - 1].setUnread(username);
             client.ActiveOnChannel = ChannelHandler.channels[index - 1].name;
             client.Status = Status.Online;
 

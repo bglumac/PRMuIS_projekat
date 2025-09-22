@@ -7,6 +7,7 @@ using System.Net.Configuration;
 using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using ClientClass;
 using Crypto;
@@ -69,7 +70,24 @@ namespace Instant_messaging_application.Classes
 
         public void Join(string username, Socket socket)
         {
+            Logger.Log("Syncing unread");
             users[username] = socket;
+            for (int i = getUnread(username); i < messages.Count; i++)
+            {
+                Logger.Log("sending msg");
+                byte[] buffer = new byte[1024];
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    BinaryFormatter bf = new BinaryFormatter();
+                    bf.Serialize(ms, messages[i]);
+                    buffer = ms.ToArray();
+                    buffer = Vizner.Encrypt(buffer);
+                    socket.Send(buffer);
+                    Thread.Sleep(100);
+                }
+            }
+            setUnread(username);
+
         }
 
         public int getUnread(string username)
@@ -79,7 +97,7 @@ namespace Instant_messaging_application.Classes
                 return messages.Count - lastRead[username];
             }
 
-            return messages.Count;
+            return 0;
         }
 
         public void setUnread(string username)
